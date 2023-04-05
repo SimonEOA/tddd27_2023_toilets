@@ -1,14 +1,29 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Flex, Text, chakra } from "@chakra-ui/react";
 import { Marker, Popup } from "react-leaflet";
-import L from "leaflet";
+import { Icon } from "leaflet";
 
-function GetIcon(_iconSize) {
-  return L.icon({
-    iconUrl: require("../assets/images/toiletimage.png"),
-    iconSize: _iconSize,
-  });
-}
+const ToiletIcon = new Icon({
+  iconUrl: "/001-public-toilet.png",
+  iconSize: [50, 50],
+});
+
+const CustomPopup = chakra(Popup, {
+  baseStyle: {
+    backgroundColor: "blue",
+    padding: "0",
+    borderRadius: "0.25rem",
+  },
+});
 
 export default function CustomMarker() {
-  return <Marker position={[51.505, -0.09]} icon={GetIcon(20)}></Marker>;
+  return (
+    <Marker position={[58.4071175, 15.5644726]} icon={ToiletIcon}>
+      <CustomPopup offset={[0, -25]}>
+        {/* <Flex justify={"center"} align={"center"}>
+          Hej
+        </Flex> */}
+        hej
+      </CustomPopup>
+    </Marker>
+  );
 }
