@@ -1,8 +1,9 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { MapContainer, TileLayer, Marker, useMap, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 
-const Map = () => {
+const Map = ({ width, height }: { width: string; height: string }) => {
   const [geoData, setGeoData] = useState({ lat: 64.536634, lng: 16.779852 });
 
   const center = [geoData.lat, geoData.lng];
@@ -11,12 +12,11 @@ const Map = () => {
     <MapContainer
       center={[51.505, -0.09]}
       zoom={13}
-      scrollWheelZoom={false}
-      style={{ height: "100vh" }}
+      style={{ width: width, height: height }}
     >
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       />
       <Marker position={[51.505, -0.09]}>
         <Popup>
