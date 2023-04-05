@@ -4,6 +4,8 @@ import Layout from "../components/Layout";
 import Post, { PostProps } from "../components/Post";
 import prisma from "../lib/prisma";
 import "leaflet/dist/leaflet.css";
+import Image from "next/image";
+import { Box } from "@chakra-ui/react";
 
 import dynamic from "next/dynamic";
 
