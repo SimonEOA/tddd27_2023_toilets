@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { GetStaticProps } from "next";
 import Layout from "../components/Layout";
 import Post, { PostProps } from "../components/Post";
 import prisma from "../lib/prisma";
 
 import dynamic from "next/dynamic";
-import { Box, Flex, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, VStack } from "@chakra-ui/react";
 
 /**
 export const getStaticProps: GetStaticProps = async () => {
@@ -34,11 +34,11 @@ const Blog = () => {
 
   return (
     <VStack h="100%" justifyContent={"center"}>
-      <Box w="50vw" h="100px">
-        {" "}
-        du din
+      <Heading>Vacker karta</Heading>
+
+      <Box>
+        <MapWithNoSSR width="50vw" height="50vh"></MapWithNoSSR>
       </Box>
-      <MapWithNoSSR width="50vw" height="50vh"></MapWithNoSSR>
     </VStack>
   );
 };
