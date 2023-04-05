@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, useMap, Popup } from "react-leaflet";
 import CustomMarker from "../components/Marker";
 import "leaflet/dist/leaflet.css";
 
-import { Markers } from "../components/Markes";
+import { Markers } from "../components/Markers/Markes";
 import { Point } from "../types/markerTypes";
 import { Button } from "@chakra-ui/react";
 

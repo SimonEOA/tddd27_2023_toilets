@@ -2,7 +2,8 @@ import { Box } from "@chakra-ui/react";
 import { Icon } from "leaflet";
 import { useState } from "react";
 import { LayerGroup, Marker, Popup, useMapEvents } from "react-leaflet";
-import { MarkerType } from "../types/markerTypes";
+import { MarkerType } from "../../types/markerTypes";
+import CustomMarker from "./Marker";
 
 export const Markers = ({ add }: { add: boolean }) => {
   const [markers, setMarkers] = useState<MarkerType[]>([]);
@@ -19,11 +20,7 @@ export const Markers = ({ add }: { add: boolean }) => {
   return (
     <LayerGroup>
       {markers.map((marker, index) => (
-        <Marker key={index} position={marker.position}>
-          <Popup>
-            <span>{marker.info}</span>
-          </Popup>
-        </Marker>
+        <CustomMarker key={index} marker={marker}></CustomMarker>
       ))}
     </LayerGroup>
   );
