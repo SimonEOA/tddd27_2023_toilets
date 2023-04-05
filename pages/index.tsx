@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { GetStaticProps } from "next";
 import Layout from "../components/Layout";
 import Post, { PostProps } from "../components/Post";
@@ -7,7 +7,7 @@ import "leaflet/dist/leaflet.css";
 import Image from "next/image";
 import Toilet from "../public/toiletimage.png";
 import dynamic from "next/dynamic";
-import { Box, Flex, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, VStack } from "@chakra-ui/react";
 
 type Props = {
   feed: PostProps[];
@@ -20,11 +20,9 @@ const Blog = () => {
 
   return (
     <VStack h="100%" justifyContent={"center"}>
-      <Box w="50vw" h="100px">
-        {" "}
-        du din
-      </Box>
-      <MapWithNoSSR width="100vw" height="50vh"></MapWithNoSSR>
+      <Heading>Vacker karta</Heading>
+
+      <MapWithNoSSR width="50vw" height="50vh"></MapWithNoSSR>
     </VStack>
   );
 };
