@@ -5,26 +5,10 @@ import Post, { PostProps } from "../components/Post";
 import prisma from "../lib/prisma";
 import "leaflet/dist/leaflet.css";
 import Image from "next/image";
-
+import Toilet from "../public/toiletimage.png";
 import dynamic from "next/dynamic";
 import { Box, Flex, VStack } from "@chakra-ui/react";
 
-/**
-export const getStaticProps: GetStaticProps = async () => {
-  const feed = await prisma.post.findMany({
-    where: { published: true },
-    include: {
-      author: {
-        select: { name: true },
-      },
-    },
-  });
-  return {
-    props: { feed },
-    revalidate: 10,
-  };
-};
-*/
 type Props = {
   feed: PostProps[];
 };
@@ -40,7 +24,7 @@ const Blog = () => {
         {" "}
         du din
       </Box>
-      <MapWithNoSSR width="50vw" height="50vh"></MapWithNoSSR>
+      <MapWithNoSSR width="100vw" height="50vh"></MapWithNoSSR>
     </VStack>
   );
 };
