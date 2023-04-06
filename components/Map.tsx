@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { MapContainer, TileLayer, Marker, useMap, Popup } from "react-leaflet";
-import CustomMarker from "../components/Marker";
+import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
-import { Markers } from "../components/Markers/Markes";
+import { Markers } from "./Markers/Markes";
 import { Point } from "../types/markerTypes";
 import { Button } from "@chakra-ui/react";
 

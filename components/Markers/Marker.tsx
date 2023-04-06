@@ -1,4 +1,4 @@
-import { Box, Flex, Text, background, chakra } from "@chakra-ui/react";
+import { chakra } from "@chakra-ui/react";
 import { Marker, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
 import { MarkerType } from "../../types/markerTypes";
@@ -23,7 +23,7 @@ interface CustomMarkerProps {
 
 export default function CustomMarker({ key, marker }: CustomMarkerProps) {
   return (
-    <Marker position={marker.position} icon={ToiletIcon}>
+    <Marker key={key} position={marker.position} icon={ToiletIcon}>
       <CustomPopup offset={[0, -25]}>{marker.info}</CustomPopup>
     </Marker>
   );

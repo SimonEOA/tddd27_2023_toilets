@@ -1,7 +1,5 @@
-import { Box } from "@chakra-ui/react";
-import { Icon } from "leaflet";
 import { useState } from "react";
-import { LayerGroup, Marker, Popup, useMapEvents } from "react-leaflet";
+import { LayerGroup, useMapEvents } from "react-leaflet";
 import { MarkerType } from "../../types/markerTypes";
 import CustomMarker from "./Marker";
 

@@ -14,7 +14,7 @@ type Props = {
 };
 
 const Blog = () => {
-  const MapWithNoSSR = dynamic(() => import("./Map"), {
+  const MapWithNoSSR = dynamic(() => import("../components/Map"), {
     ssr: false,
   });
 
