@@ -8,21 +8,42 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Post {
-  id        String     @default(cuid()) @id
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User?   @relation(fields: [authorId], references: [id])
-  authorId  String?
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String?  @unique
+  karma     Int?     @default(0)
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  places    Place[]
+  reviews   Review[]
+
+  @@map(name: "users")
 }
 
-model User {
-  id            String       @default(cuid()) @id
-  name          String?
-  email         String?   @unique
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
-  posts         Post[]
-  @@map(name: "users")
+model Review {
+  id        String   @id @default(cuid())
+  content   String
+  rating    Int
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  userId    String
+  placeId   String
+  user      User     @relation(fields: [userId], references: [id])
+  place     Place    @relation(fields: [placeId], references: [id])
+}
+
+model Place {
+  id         String   @id @default(cuid())
+  name       String
+  address    String
+  attributes String[]
+  rating     Int
+  longitude  Float
+  latitude   Float
+  createdAt  DateTime @default(now()) @map(name: "created_at")
+  updatedAt  DateTime @updatedAt @map(name: "updated_at")
+  ownerId    String
+  owner      User     @relation(fields: [ownerId], references: [id])
+  reviews    Review[]
 }
