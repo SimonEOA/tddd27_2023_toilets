@@ -1,17 +1,7 @@
 import React, { useState } from "react";
-import { GetStaticProps } from "next";
-import Layout from "../components/Layout";
-import Post, { PostProps } from "../components/Post";
-import prisma from "../lib/prisma";
 import "leaflet/dist/leaflet.css";
-import Image from "next/image";
-import Toilet from "../public/toiletimage.png";
 import dynamic from "next/dynamic";
-import { Box, Button, Flex, Heading, VStack } from "@chakra-ui/react";
-
-type Props = {
-  feed: PostProps[];
-};
+import { Heading, VStack } from "@chakra-ui/react";
 
 const Blog = () => {
   const MapWithNoSSR = dynamic(() => import("../components/Map"), {
