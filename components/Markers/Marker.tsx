@@ -1,8 +1,9 @@
-import { Marker, Popup } from "react-leaflet";
+import { Marker, Popup, useMapEvents } from "react-leaflet";
 import { Icon } from "leaflet";
 import { MarkerType } from "../../types/markerTypes";
 import Image from "next/image";
-import { Flex } from "@chakra-ui/react";
+import { Flex, Box } from "@chakra-ui/react";
+import { useState } from "react";
 
 const ToiletIcon = new Icon({
   iconUrl: "/001-public-toilet.png",
@@ -12,11 +13,39 @@ const ToiletIcon = new Icon({
 interface CustomMarkerProps {
   key: number;
   marker: MarkerType;
+  currentMarker: (marker: string) => void;
 }
 
-export default function CustomMarker({ key, marker }: CustomMarkerProps) {
+export default function CustomMarker({
+  key,
+  marker,
+  currentMarker,
+}: CustomMarkerProps) {
+  const [popupOpen, setPopupOpen] = useState(false);
+
+  function handlePopupOpen() {
+    setPopupOpen(true);
+  }
+
+  function handlePopupClose() {
+    setPopupOpen(false);
+  }
+  const map = useMapEvents({
+    click(e) {
+      console.log("map");
+    },
+  });
+
   return (
-    <Marker position={marker.position} icon={ToiletIcon}>
+    <Marker
+      position={marker.position}
+      icon={ToiletIcon}
+      eventHandlers={{
+        click: (e) => {
+          currentMarker(marker.info);
+        },
+      }}
+    >
       <Popup offset={[0, -25]}>
         <Flex
           direction="row"

@@ -1,10 +1,15 @@
 import { useState } from "react";
-import { MapContainer, TileLayer, ZoomControl } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  ZoomControl,
+  useMapEvents,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 import { Markers } from "./Markers/Markes";
 import { Point } from "../types/markerTypes";
-import { Button } from "@chakra-ui/react";
+import { Button, Box, Text, Center } from "@chakra-ui/react";
 
 const Map = ({ width, height }: { width: string; height: string }) => {
   const [geoData, setGeoData] = useState<Point>({
@@ -12,9 +17,15 @@ const Map = ({ width, height }: { width: string; height: string }) => {
     lng: 16.779852,
   });
   const [addMarker, setAddMarker] = useState(false);
+  const [marker, setMarker] = useState("");
+  const [popupOpen, setPopupOpen] = useState(false);
+
+  const currentMarker = (marker: string) => {
+    setMarker(marker);
+  };
 
   return (
-    <>
+    <Box pos={"relative"}>
       <MapContainer
         center={[geoData.lat, geoData.lng]}
         zoom={13}
@@ -31,13 +42,16 @@ const Map = ({ width, height }: { width: string; height: string }) => {
           attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
           url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
         />
-        <Markers add={addMarker} />
+        <Markers add={addMarker} currentMarker={currentMarker} />
         <ZoomControl position="bottomright" />
       </MapContainer>
       <Button w={"100%"} mt="5px" onClick={() => setAddMarker((cur) => !cur)}>
         {!addMarker ? "Add markers" : "Stop adding markers"}
       </Button>
-    </>
+      <Center>
+        <Text>{marker}</Text>
+      </Center>
+    </Box>
   );
 };
 export default Map;
