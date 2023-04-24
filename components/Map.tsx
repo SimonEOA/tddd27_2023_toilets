@@ -10,8 +10,25 @@ import "leaflet/dist/leaflet.css";
 import { Markers } from "./Markers/Markes";
 import { Point } from "../types/markerTypes";
 import { Button, Box, Text, Center } from "@chakra-ui/react";
+type Place = {
+  id: string;
+  name: string;
+  latitude: number;
+  longitude: number;
+};
+type Props = {
+  markers: Place[];
+};
 
-const Map = ({ width, height }: { width: string; height: string }) => {
+const Map = ({
+  width,
+  height,
+  markers,
+}: {
+  width: string;
+  height: string;
+  markers: Place[];
+}) => {
   const [geoData, setGeoData] = useState<Point>({
     lat: 64.536634,
     lng: 16.779852,
@@ -42,7 +59,11 @@ const Map = ({ width, height }: { width: string; height: string }) => {
           attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
           url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
         />
-        <Markers add={addMarker} currentMarker={currentMarker} />
+        <Markers
+          add={addMarker}
+          currentMarker={currentMarker}
+          markers={markers}
+        />
         <ZoomControl position="bottomright" />
       </MapContainer>
       <Button w={"100%"} mt="5px" onClick={() => setAddMarker((cur) => !cur)}>
