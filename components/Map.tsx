@@ -67,6 +67,7 @@ const Map = ({
       <Button w={"100%"} mt="5px" onClick={() => setAddMarker((cur) => !cur)}>
         {!addMarker ? "Add markers" : "Stop adding markers"}
       </Button>
+
       <Center>
         <Text>{marker}</Text>
       </Center>

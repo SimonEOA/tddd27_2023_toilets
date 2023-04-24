@@ -10,9 +10,10 @@ type Props = {
 };
 export const Markers: React.FC<Props> = ({ add, currentMarker, markers }) => {
   const [places, setPlaces] = useState<Place[]>(markers);
+  const [popupOpen, setPopupOpen] = useState(false);
 
   const map = useMapEvent("click", (e) => {
-    if (add) {
+    if (add && !popupOpen) {
       setPlaces((prevMarkers) => [
         ...prevMarkers,
         {
@@ -25,6 +26,10 @@ export const Markers: React.FC<Props> = ({ add, currentMarker, markers }) => {
       ]);
     }
   });
+
+  const handlePopupOpen = (open: boolean) => {
+    setPopupOpen(open);
+  };
 
   const handleMarkerRemove = (indexToRemove) => {
     setPlaces((prevMarkers) =>
@@ -40,6 +45,7 @@ export const Markers: React.FC<Props> = ({ add, currentMarker, markers }) => {
           place={place}
           currentMarker={currentMarker}
           onRemove={() => handleMarkerRemove(index)}
+          onOpen={handlePopupOpen}
         ></CustomMarker>
       ))}
     </LayerGroup>

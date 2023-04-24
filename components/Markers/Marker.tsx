@@ -5,6 +5,8 @@ import Image from "next/image";
 import { Flex, Box, Button } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
+import { on } from "events";
+import { useRouter } from "next/router";
 
 const ToiletIcon = new Icon({
   iconUrl: "/001-public-toilet.png",
@@ -15,25 +17,30 @@ interface CustomMarkerProps {
   place: Place;
   currentMarker: (marker: string) => void;
   onRemove: () => void;
+  onOpen: (open: boolean) => void;
 }
 
 export default function CustomMarker({
   place,
   currentMarker,
   onRemove,
+  onOpen,
 }: CustomMarkerProps) {
   const [popupOpen, setPopupOpen] = useState(false);
   const markerRef = useRef(null);
   const { data: session, status } = useSession();
+  const router = useRouter();
 
   function handlePopupOpen() {
     currentMarker(place.name);
+    onOpen(true);
   }
 
   function handlePopupClose() {
     if (!place.verified) {
       handleRemove();
     }
+    onOpen(false);
   }
 
   const handleRemove = () => {
@@ -47,25 +54,30 @@ export default function CustomMarker({
   }, []);
 
   const addPlace = async () => {
-    const res = await fetch("/api/place/create", {
-      method: "POST",
-      body: JSON.stringify({
-        name: session.user.name,
-        address: "SIMONS väg 1",
-        attributes: ["test"],
-        rating: 5,
-        longitude: place.longitude,
-        latitude: place.latitude,
-        ownerId: session.user.id,
-        verified: true,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    if (!place.verified) {
+      const res = await fetch("/api/place/create", {
+        method: "POST",
+        body: JSON.stringify({
+          name: session.user.name,
+          address: "SIMONS väg 1",
+          attributes: ["test"],
+          rating: 5,
+          longitude: place.longitude,
+          latitude: place.latitude,
+          ownerId: session.user.id,
+          verified: true,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    const data = await res.json();
-    console.log(data);
+      const data = await res.json();
+      console.log(data);
+      router.reload();
+    } else {
+      console.log("Place already verified");
+    }
   };
   const point: Point = { lat: place.latitude, lng: place.longitude };
   return (
