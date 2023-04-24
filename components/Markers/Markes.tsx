@@ -19,6 +19,7 @@ export const Markers: React.FC<Props> = ({ add, currentMarker, markers }) => {
         {
           id: "test",
           name: "test",
+          address: "test",
           latitude: e.latlng.lat,
           longitude: e.latlng.lng,
           verified: false,
