@@ -20,12 +20,10 @@ const Map = ({
   width,
   height,
   markers,
-  place,
 }: {
   width: string;
   height: string;
   markers: Place[];
-  place: Place;
 }) => {
   const [geoData, setGeoData] = useState<Point>({
     lat: 64.536634,
@@ -41,17 +39,11 @@ const Map = ({
   const mapRef = useRef(null); // Create a ref for the map instance
 
   const handleFlyTo = (place: Place) => {
-    console.log(place);
     if (mapRef.current == null) return;
-    const newPosition = [58.409, 15.0]; // The coordinates of Berlin
+    const newPosition = [place.latitude, place.longitude]; // The coordinates of Berlin
     const zoomLevel = 13; // The zoom level for the map
-    mapRef.current.flyTo(newPosition, zoomLevel); // Fly to the new position using the flyTo() method
+    mapRef.current.flyTo(newPosition, zoomLevel);
   };
-
-  useEffect(() => {
-    console.log("FLY");
-    handleFlyTo(place);
-  }, [place]);
 
   return (
     <Box pos={"relative"}>

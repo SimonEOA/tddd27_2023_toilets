@@ -1,4 +1,4 @@
-import { LayerGroup, Marker, Popup, useMapEvents } from "react-leaflet";
+import { LayerGroup, Marker, Popup, useMap, useMapEvents } from "react-leaflet";
 import { Icon, point } from "leaflet";
 import { MarkerType, Place, Point } from "../../types/markerTypes";
 import Image from "next/image";
@@ -79,6 +79,7 @@ export default function CustomMarker({
       console.log("Place already verified");
     }
   };
+
   const point: Point = { lat: place.latitude, lng: place.longitude };
   return (
     <Marker

@@ -16,14 +16,11 @@ import { useEffect } from "react";
 import { parse } from "path";
 interface HeaderProps {
   markers: Place[];
-  setPlace: (place: Place) => void;
 }
 
-export default function Header({ markers, setPlace }: HeaderProps) {
+export default function Header({ markers }: HeaderProps) {
   const { data: session, status } = useSession();
-  function handleSelect(value, event) {
-    console.log(`Selected value: ${value}`);
-  }
+
   return (
     <Grid
       shadow={"md"}
@@ -41,11 +38,10 @@ export default function Header({ markers, setPlace }: HeaderProps) {
           const tempPLace: Place = {
             id: "test",
             name: "test",
-            latitude: parseFloat(lat),
-            longitude: parseFloat(lng),
+            latitude: Number(parseFloat(lat).toFixed(3)),
+            longitude: Number(parseFloat(lng).toFixed(3)),
             verified: false,
           };
-          setPlace(tempPLace);
         }}
       >
         {markers.map((marker) => (

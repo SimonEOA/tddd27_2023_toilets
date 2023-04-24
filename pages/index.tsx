@@ -12,21 +12,19 @@ type Props = {
 };
 
 const Blog = ({ markers }: Props) => {
-  const [place, setPlace] = useState<Place>();
   const MapWithNoSSR = dynamic(() => import("../components/Map"), {
     ssr: false,
   });
 
   return (
     <>
-      <Header markers={markers} setPlace={setPlace} />
+      <Header markers={markers} />
       <VStack h="100%" justifyContent={"center"}>
         <Spacer />
         <MapWithNoSSR
           width="100vw"
           height="75vh"
           markers={markers}
-          place={place}
         ></MapWithNoSSR>
       </VStack>
     </>
