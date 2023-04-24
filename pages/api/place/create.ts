@@ -1,7 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 
+
 export default async function handler(req, res) {
-  const { name, address, attributes, rating, longitude, latitude, ownerId } = req.body;
+  const { name, address, attributes, rating, longitude, latitude, ownerId, verified } = req.body;
 
   const prisma = new PrismaClient();
 
@@ -16,9 +17,11 @@ export default async function handler(req, res) {
         rating,
         longitude,
         latitude,
+        verified,
         owner: {
           connect: { id: ownerId }
-        }
+        },
+        
       },
     });
 

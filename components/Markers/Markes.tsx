@@ -1,15 +1,7 @@
-import { useState } from "react";
-import { LayerGroup, useMapEvents } from "react-leaflet";
-import { MarkerType } from "../../types/markerTypes";
+import { useEffect, useState } from "react";
+import { LayerGroup, useMapEvent, useMapEvents } from "react-leaflet";
+import { MarkerType, Place } from "../../types/markerTypes";
 import CustomMarker from "./Marker";
-import axios from "axios";
-
-type Place = {
-  id: string;
-  name: string;
-  latitude: number;
-  longitude: number;
-};
 
 type Props = {
   markers: Place[];
@@ -18,18 +10,20 @@ type Props = {
 };
 export const Markers: React.FC<Props> = ({ add, currentMarker, markers }) => {
   const [places, setPlaces] = useState<Place[]>(markers);
-  const map = useMapEvents({
-    click(e) {
-      if (!add) return;
 
-      const newPlace: Place = {
-        id: "test",
-        name: "New Place",
-        latitude: e.latlng.lat,
-        longitude: e.latlng.lng,
-      };
-      setPlaces([...places, newPlace]);
-    },
+  const map = useMapEvent("click", (e) => {
+    if (add) {
+      setPlaces((prevMarkers) => [
+        ...prevMarkers,
+        {
+          id: "test",
+          name: "test",
+          latitude: e.latlng.lat,
+          longitude: e.latlng.lng,
+          verified: false,
+        },
+      ]);
+    }
   });
 
   const handleMarkerRemove = (indexToRemove) => {
@@ -37,13 +31,12 @@ export const Markers: React.FC<Props> = ({ add, currentMarker, markers }) => {
       prevMarkers.filter((_, index) => index !== indexToRemove)
     );
   };
-  console.log(markers);
 
   return (
     <LayerGroup>
       {places.map((place, index) => (
         <CustomMarker
-          key={index}
+          key={place.id}
           place={place}
           currentMarker={currentMarker}
           onRemove={() => handleMarkerRemove(index)}

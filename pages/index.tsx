@@ -4,12 +4,8 @@ import dynamic from "next/dynamic";
 import { Button, Spacer, VStack } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
-type Place = {
-  id: string;
-  name: string;
-  latitude: number;
-  longitude: number;
-};
+import { Place } from "../types/markerTypes";
+
 type Props = {
   markers: Place[];
 };

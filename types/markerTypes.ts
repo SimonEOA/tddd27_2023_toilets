@@ -8,3 +8,11 @@ export type MarkerType = {
   info: string;
 };
 
+export type Place = {
+  id: string;
+  name: string;
+  latitude: number;
+  longitude: number;
+  verified: boolean;
+};
+

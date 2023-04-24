@@ -1,23 +1,15 @@
-import { Marker, Popup, useMapEvents } from "react-leaflet";
+import { LayerGroup, Marker, Popup, useMapEvents } from "react-leaflet";
 import { Icon, point } from "leaflet";
-import { MarkerType, Point } from "../../types/markerTypes";
+import { MarkerType, Place, Point } from "../../types/markerTypes";
 import Image from "next/image";
 import { Flex, Box, Button } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
-import { useAddMarker } from "../../hooks/Markers";
 
 const ToiletIcon = new Icon({
   iconUrl: "/001-public-toilet.png",
   iconSize: [50, 50],
 });
-
-type Place = {
-  id: string;
-  name: string;
-  latitude: number;
-  longitude: number;
-};
 
 interface CustomMarkerProps {
   place: Place;
@@ -31,31 +23,28 @@ export default function CustomMarker({
   onRemove,
 }: CustomMarkerProps) {
   const [popupOpen, setPopupOpen] = useState(false);
+  const markerRef = useRef(null);
   const { data: session, status } = useSession();
 
   function handlePopupOpen() {
-    setPopupOpen(true);
+    currentMarker(place.name);
   }
 
   function handlePopupClose() {
-    setPopupOpen(false);
+    if (!place.verified) {
+      handleRemove();
+    }
   }
-  const map = useMapEvents({
-    click(e) {
-      console.log("map");
-    },
-  });
 
   const handleRemove = () => {
     onRemove();
   };
-  const markerRef = useRef(null);
 
   useEffect(() => {
     if (markerRef.current) {
       markerRef.current.openPopup();
     }
-  }, [markerRef]);
+  }, []);
 
   const addPlace = async () => {
     const res = await fetch("/api/place/create", {
@@ -68,11 +57,13 @@ export default function CustomMarker({
         longitude: place.longitude,
         latitude: place.latitude,
         ownerId: session.user.id,
+        verified: true,
       }),
       headers: {
         "Content-Type": "application/json",
       },
     });
+
     const data = await res.json();
     console.log(data);
   };
@@ -82,9 +73,8 @@ export default function CustomMarker({
       position={point}
       icon={ToiletIcon}
       eventHandlers={{
-        click: (e) => {
-          currentMarker(place.name);
-        },
+        popupopen: () => handlePopupOpen(),
+        popupclose: () => handlePopupClose(),
       }}
       ref={markerRef}
     >

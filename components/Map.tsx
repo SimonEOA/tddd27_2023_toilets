@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
+  LayerGroup,
   MapContainer,
   TileLayer,
   ZoomControl,
@@ -8,14 +9,9 @@ import {
 import "leaflet/dist/leaflet.css";
 
 import { Markers } from "./Markers/Markes";
-import { Point } from "../types/markerTypes";
+import { Place, Point } from "../types/markerTypes";
 import { Button, Box, Text, Center } from "@chakra-ui/react";
-type Place = {
-  id: string;
-  name: string;
-  latitude: number;
-  longitude: number;
-};
+
 type Props = {
   markers: Place[];
 };
@@ -59,11 +55,13 @@ const Map = ({
           attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
           url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
         />
+
         <Markers
           add={addMarker}
           currentMarker={currentMarker}
           markers={markers}
         />
+
         <ZoomControl position="bottomright" />
       </MapContainer>
       <Button w={"100%"} mt="5px" onClick={() => setAddMarker((cur) => !cur)}>
