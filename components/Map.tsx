@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   LayerGroup,
   MapContainer,
@@ -20,10 +20,12 @@ const Map = ({
   width,
   height,
   markers,
+  place,
 }: {
   width: string;
   height: string;
   markers: Place[];
+  place: Place;
 }) => {
   const [geoData, setGeoData] = useState<Point>({
     lat: 64.536634,
@@ -36,6 +38,20 @@ const Map = ({
   const currentMarker = (marker: string) => {
     setMarker(marker);
   };
+  const mapRef = useRef(null); // Create a ref for the map instance
+
+  const handleFlyTo = (place: Place) => {
+    console.log(place);
+    if (mapRef.current == null) return;
+    const newPosition = [58.409, 15.0]; // The coordinates of Berlin
+    const zoomLevel = 13; // The zoom level for the map
+    mapRef.current.flyTo(newPosition, zoomLevel); // Fly to the new position using the flyTo() method
+  };
+
+  useEffect(() => {
+    console.log("FLY");
+    handleFlyTo(place);
+  }, [place]);
 
   return (
     <Box pos={"relative"}>
@@ -50,6 +66,7 @@ const Map = ({
           </p>
         }
         zoomControl={false}
+        ref={mapRef}
       >
         <TileLayer
           attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
@@ -64,7 +81,13 @@ const Map = ({
 
         <ZoomControl position="bottomright" />
       </MapContainer>
-      <Button w={"100%"} mt="5px" onClick={() => setAddMarker((cur) => !cur)}>
+      <Button
+        w={"100%"}
+        mt="5px"
+        onClick={() => {
+          setAddMarker((cur) => !cur);
+        }}
+      >
         {!addMarker ? "Add markers" : "Stop adding markers"}
       </Button>
 
