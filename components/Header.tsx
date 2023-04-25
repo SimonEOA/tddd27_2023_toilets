@@ -34,7 +34,7 @@ export default function Header({ markers, handleFly }: HeaderProps) {
         justifySelf={"flex-start"}
         ml={10}
         width={"200px"}
-        size="lg"
+        size="md"
         onChange={(e) => {
           const [lat, lng] = e.target.value.split(",");
           const tempPLace: Place = {
@@ -47,18 +47,18 @@ export default function Header({ markers, handleFly }: HeaderProps) {
           };
           handleFly([tempPLace.latitude, tempPLace.longitude]);
         }}
+        w="fit-content"
       >
         {markers.map((marker) => (
           <option
             key={marker.id}
             value={`${marker.latitude},${marker.longitude}`}
           >
-            <VStack>
-              <Text>{marker.address} </Text>
-              <Text>{`${Number(marker.latitude.toFixed(3))},${Number(
-                marker.longitude.toFixed(3)
-              )}`}</Text>
-            </VStack>
+            {marker.address +
+              " " +
+              Number(marker.latitude.toFixed(3)) +
+              " " +
+              Number(marker.longitude.toFixed(3))}
           </option>
         ))}
       </Select>

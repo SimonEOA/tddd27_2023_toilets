@@ -2,15 +2,17 @@ import { LayerGroup, Marker, Popup, useMap, useMapEvents } from "react-leaflet";
 import { Icon, point } from "leaflet";
 import { MarkerType, Place, Point } from "../../types/markerTypes";
 import Image from "next/image";
-import { Flex, Box, Button, Input } from "@chakra-ui/react";
+import { Flex, Box, Button, Input, Text } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { on } from "events";
 import { useRouter } from "next/router";
 
 const ToiletIcon = new Icon({
-  iconUrl: "/001-public-toilet.png",
+  iconUrl: "/002-bathroom.png",
   iconSize: [50, 50],
+  iconAnchor: [25, 50],
+  popupAnchor: [0, -50],
 });
 
 interface CustomMarkerProps {
@@ -57,7 +59,9 @@ export default function CustomMarker({
   }, []);
 
   const addPlace = async () => {
-    if (!place.verified && session) {
+    if (!session) console.log("Not logged in");
+    else if (place.verified) console.log("Place already verified");
+    else {
       const res = await fetch("/api/place/create", {
         method: "POST",
         body: JSON.stringify({
@@ -85,8 +89,6 @@ export default function CustomMarker({
         verified: true,
       };
       handlePlaces(newPLace);
-    } else {
-      console.log("Place already verified");
     }
   };
 
@@ -101,22 +103,40 @@ export default function CustomMarker({
       }}
       ref={markerRef}
     >
-      <Popup offset={[0, -25]}>
-        <Flex
-          direction="row"
-          align="center"
-          justifyContent={"center"}
-          w={300}
-          h={100}
-        >
-          <Input
-            placeholder="Name"
-            onChange={(e) => {
-              setAddress(e.target.value);
-            }}
-          ></Input>
-          <Button onClick={() => addPlace()}>Add Place</Button>
-        </Flex>
+      <Popup>
+        {!place.verified ? (
+          <Flex
+            direction="row"
+            align="center"
+            justifyContent={"center"}
+            w={300}
+            h={100}
+          >
+            <Input
+              placeholder="Name"
+              onChange={(e) => {
+                setAddress(e.target.value);
+              }}
+            ></Input>
+            <Button onClick={() => addPlace()}>Add Place</Button>
+          </Flex>
+        ) : (
+          <Flex
+            direction="column"
+            align="center"
+            justifyContent={"center"}
+            w={300}
+            h={100}
+          >
+            <Image
+              src="/001-public-toilet.png"
+              alt="Picture of the author"
+              width={50}
+              height={50}
+            />
+            <Text>{place.address + " by " + place.name}</Text>
+          </Flex>
+        )}
       </Popup>
     </Marker>
   );
