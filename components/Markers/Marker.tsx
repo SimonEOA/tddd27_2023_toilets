@@ -20,6 +20,7 @@ interface CustomMarkerProps {
   currentMarker: (marker: Place) => void;
   onRemove: () => void;
   onOpen: (open: boolean) => void;
+  handlePlaces: (place: Place) => void;
 }
 
 export default function CustomMarker({
@@ -27,6 +28,7 @@ export default function CustomMarker({
   currentMarker,
   onRemove,
   onOpen,
+  handlePlaces,
 }: CustomMarkerProps) {
   const [popupOpen, setPopupOpen] = useState(false);
   const [address, setAddress] = useState("");
@@ -79,8 +81,15 @@ export default function CustomMarker({
       });
 
       const data = await res.json();
-      console.log(data);
-      router.reload();
+      const newPLace: Place = {
+        id: data.id,
+        name: data.name,
+        address: data.address,
+        longitude: data.longitude,
+        latitude: data.latitude,
+        verified: true,
+      };
+      handlePlaces(newPLace);
     }
   };
 
