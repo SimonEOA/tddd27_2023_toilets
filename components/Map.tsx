@@ -23,8 +23,8 @@ const Map = ({
   markers: Place[];
 }) => {
   const [geoData, setGeoData] = useState<Point>({
-    lat: 64.536634,
-    lng: 16.779852,
+    lat: markers[markers.length - 1].latitude,
+    lng: markers[markers.length - 1].longitude,
   });
   const [addMarker, setAddMarker] = useState(false);
   const [marker, setMarker] = useState("");
