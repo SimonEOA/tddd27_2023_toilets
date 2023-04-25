@@ -38,6 +38,10 @@ export const Markers: React.FC<Props> = ({ add, currentMarker, markers }) => {
     );
   };
 
+  const handlePlaces = (place: Place) => {
+    setPlaces([...places, place]);
+  };
+
   return (
     <LayerGroup>
       {places.map((place, index) => (
@@ -47,6 +51,7 @@ export const Markers: React.FC<Props> = ({ add, currentMarker, markers }) => {
           currentMarker={currentMarker}
           onRemove={() => handleMarkerRemove(index)}
           onOpen={handlePopupOpen}
+          handlePlaces={handlePlaces}
         ></CustomMarker>
       ))}
     </LayerGroup>
