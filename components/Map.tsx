@@ -11,10 +11,7 @@ import "leaflet/dist/leaflet.css";
 import { Markers } from "./Markers/Markes";
 import { Place, Point } from "../types/markerTypes";
 import { Button, Box, Text, Center } from "@chakra-ui/react";
-
-type Props = {
-  markers: Place[];
-};
+import Header from "./Header";
 
 const Map = ({
   width,
@@ -32,21 +29,23 @@ const Map = ({
   const [addMarker, setAddMarker] = useState(false);
   const [marker, setMarker] = useState("");
   const [popupOpen, setPopupOpen] = useState(false);
+  const [position, setPosition] = useState<number[]>([]);
 
   const currentMarker = (marker: string) => {
     setMarker(marker);
   };
   const mapRef = useRef(null); // Create a ref for the map instance
 
-  const handleFlyTo = (place: Place) => {
+  const handleFlyTo = (position: number[]) => {
     if (mapRef.current == null) return;
-    const newPosition = [place.latitude, place.longitude]; // The coordinates of Berlin
+    const newPosition = [position[0], position[1]]; // The coordinates of Berlin
     const zoomLevel = 13; // The zoom level for the map
     mapRef.current.flyTo(newPosition, zoomLevel);
   };
 
   return (
     <Box pos={"relative"}>
+      <Header markers={markers} handleFly={handleFlyTo} />
       <MapContainer
         center={[geoData.lat, geoData.lng]}
         zoom={13}

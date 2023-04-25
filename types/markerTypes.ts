@@ -11,6 +11,7 @@ export type MarkerType = {
 export type Place = {
   id: string;
   name: string;
+  address: string;
   latitude: number;
   longitude: number;
   verified: boolean;
