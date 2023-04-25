@@ -1,33 +1,52 @@
-import { useState } from "react";
-import { LayerGroup, useMapEvents } from "react-leaflet";
-import { MarkerType } from "../../types/markerTypes";
+import { useEffect, useState } from "react";
+import { LayerGroup, useMapEvent, useMapEvents } from "react-leaflet";
+import { MarkerType, Place } from "../../types/markerTypes";
 import CustomMarker from "./Marker";
 
-export const Markers = ({
-  add,
-  currentMarker,
-}: {
+type Props = {
+  markers: Place[];
   add: boolean;
-  currentMarker: (marker: string) => void;
-}) => {
-  const [markers, setMarkers] = useState<MarkerType[]>([]);
-  const map = useMapEvents({
-    click(e) {
-      if (!add) return;
-      setMarkers((current) => [
-        ...current,
-        { position: e.latlng, info: "test" },
+  currentMarker: (marker: Place) => void;
+};
+export const Markers: React.FC<Props> = ({ add, currentMarker, markers }) => {
+  const [places, setPlaces] = useState<Place[]>(markers);
+  const [popupOpen, setPopupOpen] = useState(false);
+
+  const map = useMapEvent("click", (e) => {
+    if (add && !popupOpen) {
+      setPlaces((prevMarkers) => [
+        ...prevMarkers,
+        {
+          id: "test",
+          name: "test",
+          address: "test",
+          latitude: e.latlng.lat,
+          longitude: e.latlng.lng,
+          verified: false,
+        },
       ]);
-    },
+    }
   });
+
+  const handlePopupOpen = (open: boolean) => {
+    setPopupOpen(open);
+  };
+
+  const handleMarkerRemove = (indexToRemove) => {
+    setPlaces((prevMarkers) =>
+      prevMarkers.filter((_, index) => index !== indexToRemove)
+    );
+  };
 
   return (
     <LayerGroup>
-      {markers.map((marker, index) => (
+      {places.map((place, index) => (
         <CustomMarker
-          key={index}
-          marker={marker}
+          key={place.id}
+          place={place}
           currentMarker={currentMarker}
+          onRemove={() => handleMarkerRemove(index)}
+          onOpen={handlePopupOpen}
         ></CustomMarker>
       ))}
     </LayerGroup>

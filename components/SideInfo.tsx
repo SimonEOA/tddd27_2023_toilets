@@ -7,11 +7,13 @@ import {
   useDisclosure,
   Image,
   Flex,
+  Text,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import useOpenClose from "../hooks/useOpenClose";
+import { Place } from "../types/markerTypes";
 
-const SideInfo = () => {
+const SideInfo = ({ place }: { place: Place }) => {
   const { isOpen, toggle, close, open } = useOpenClose();
   return (
     <HStack justify={"center"}>
@@ -29,13 +31,21 @@ const SideInfo = () => {
         opacity={isOpen ? 1 : 0}
       >
         <VStack overflow={"auto"} paddingY="20px">
-          <Flex w={"100%"} align={"center"} justify={"center"}>
+          <Flex
+            w={"100%"}
+            align={"center"}
+            justify={"center"}
+            direction={"column"}
+          >
             {" "}
             <Image
               fallbackSrc="/001-public-toilet.png"
               maxW={"100%"}
               h="250px"
             />
+            <Text fontSize={"2xl"} fontWeight={"bold"}>
+              {place.address}
+            </Text>
           </Flex>
         </VStack>
       </Box>
