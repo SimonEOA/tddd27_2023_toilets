@@ -1,4 +1,13 @@
-import { Box, Button, HStack, Slide, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  HStack,
+  Slide,
+  VStack,
+  useDisclosure,
+  Image,
+  Flex,
+} from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import useOpenClose from "../hooks/useOpenClose";
 
@@ -8,11 +17,10 @@ const SideInfo = () => {
     <HStack justify={"center"}>
       <Box
         position={"fixed"}
-        top="0"
+        top="60px"
         left={"0"}
-        right={"0"}
-        height={"100vh"}
-        width={"20vh"}
+        height={"calc(100vh - 60px)"}
+        width={"400px"}
         bg="gray.100"
         zIndex={9999}
         rounded={"xl"}
@@ -20,7 +28,16 @@ const SideInfo = () => {
         transform={isOpen ? "translateX(0)" : "translateX(-100%)"}
         opacity={isOpen ? 1 : 0}
       >
-        {isOpen && <Button onClick={close}>Close</Button>}
+        <VStack overflow={"auto"} paddingY="20px">
+          <Flex w={"100%"} align={"center"} justify={"center"}>
+            {" "}
+            <Image
+              fallbackSrc="/001-public-toilet.png"
+              maxW={"100%"}
+              h="250px"
+            />
+          </Flex>
+        </VStack>
       </Box>
       <Button onClick={toggle}></Button>
     </HStack>

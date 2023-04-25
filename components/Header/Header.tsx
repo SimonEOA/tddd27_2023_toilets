@@ -18,6 +18,7 @@ export default function Header() {
       templateColumns="1fr auto 1fr"
       alignItems="center"
       p={2}
+      h="60px"
     >
       <Input
         placeholder="Search"
