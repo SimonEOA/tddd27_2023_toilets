@@ -1,17 +1,13 @@
 import React, { useState } from "react";
 import "leaflet/dist/leaflet.css";
 import dynamic from "next/dynamic";
-import { Button, Spacer, VStack } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
-import axios from "axios";
+import { VStack } from "@chakra-ui/react";
+
 import { Place } from "../types/markerTypes";
-import Header from "../components/Header";
 
 type Props = {
   markers: Place[];
 };
-import SideInfo from "../components/SideInfo";
-import useOpenClose from "../hooks/useOpenClose";
 
 const Blog = ({ markers }: Props) => {
   const MapWithNoSSR = dynamic(() => import("../components/Map"), {
@@ -23,7 +19,7 @@ const Blog = ({ markers }: Props) => {
       <VStack h="100%" justifyContent={"center"}>
         <MapWithNoSSR
           width="100vw"
-          height="75vh"
+          height="80vh"
           markers={markers}
         ></MapWithNoSSR>
       </VStack>

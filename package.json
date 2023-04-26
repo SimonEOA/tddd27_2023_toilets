@@ -7,6 +7,9 @@
     "build": "next build",
     "start": "next start"
   },
+  "eslintConfig": {
+    "extends": "next/core-web-vitals"
+  },
   "keywords": [],
   "author": "",
   "license": "MIT",

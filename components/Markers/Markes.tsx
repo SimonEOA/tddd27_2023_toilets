@@ -23,13 +23,14 @@ export const Markers: React.FC<Props> = ({
       setPlaces((prevMarkers) => [
         ...prevMarkers,
         {
-          id: "test",
-          name: "test",
-          address: "test",
+          id: null,
+          name: null,
+          address: null,
           latitude: e.latlng.lat,
           longitude: e.latlng.lng,
           verified: false,
-          rating: 5,
+          attributes: [],
+          rating: 0,
         },
       ]);
     }

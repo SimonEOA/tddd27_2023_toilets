@@ -36,7 +36,7 @@ export const CreatePlace = ({
         body: JSON.stringify({
           name: session.user.name,
           address: place.address,
-          attributes: ["test"],
+          attributes: place.attributes,
           rating: 5,
           longitude: place.longitude,
           latitude: place.latitude,

@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../../../lib/prisma";
 
 export default async function handler(req, res) {
   const {
@@ -11,8 +11,6 @@ export default async function handler(req, res) {
     ownerId,
     verified,
   } = req.body;
-
-  const prisma = new PrismaClient();
 
   try {
     const place = await prisma.place.create({

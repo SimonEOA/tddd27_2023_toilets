@@ -54,7 +54,7 @@ const SideInfo = ({
         left={"0"}
         height={"calc(100vh - 60px)"}
         width={"400px"}
-        bg="gray.100"
+        bg={"white"}
         zIndex={9999}
         rounded={"xl"}
         transition="transform 0.3s ease-in-out, opacity 0.3s ease-in-out"
@@ -130,7 +130,7 @@ const SideInfo = ({
                     </Flex>
                   </TabPanel>
                   <TabPanel>
-                    <Reviews></Reviews>
+                    <Reviews place={place}></Reviews>
                   </TabPanel>
                 </TabPanels>
               </Tabs>
