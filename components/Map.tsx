@@ -4,6 +4,7 @@ import {
   MapContainer,
   TileLayer,
   ZoomControl,
+  useMapEvent,
   useMapEvents,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -30,6 +31,8 @@ const Map = ({
   const [marker, setMarker] = useState("");
   const [popupOpen, setPopupOpen] = useState(false);
   const [position, setPosition] = useState<number[]>([]);
+  const [bounds, setBounds] = useState(null);
+  const [places, setPlaces] = useState<Place[]>(markers);
 
   const currentMarker = (marker: string) => {
     setMarker(marker);
@@ -41,6 +44,19 @@ const Map = ({
     const newPosition = [position[0], position[1]]; // The coordinates of Berlin
     const zoomLevel = 13; // The zoom level for the map
     mapRef.current.flyTo(newPosition, zoomLevel);
+  };
+
+  const handleViewportChanged = async () => {
+    const map = mapRef.current;
+    const bounds = map.getBounds();
+    setBounds(bounds);
+    console.log(bounds);
+    const res = await fetch("http://localhost:3000/api/place/getallbyarea", {
+      method: "POST",
+      body: JSON.stringify(bounds),
+    });
+    const data = await res.json();
+    setPlaces(data);
   };
 
   return (
@@ -59,6 +75,7 @@ const Map = ({
         zoomControl={false}
         ref={mapRef}
       >
+        <MapViewportListener onViewportChanged={handleViewportChanged} />
         <TileLayer
           attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
           url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
@@ -89,3 +106,9 @@ const Map = ({
   );
 };
 export default Map;
+
+function MapViewportListener({ onViewportChanged }) {
+  useMapEvent("moveend", onViewportChanged);
+  useMapEvent("zoomend", onViewportChanged);
+  return null;
+}
