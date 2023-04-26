@@ -45,6 +45,7 @@ export default function Header({ markers, handleFly }: HeaderProps) {
             latitude: Number(parseFloat(lat).toFixed(3)),
             longitude: Number(parseFloat(lng).toFixed(3)),
             verified: false,
+            rating: 0,
           };
           handleFly([tempPLace.latitude, tempPLace.longitude]);
         }}

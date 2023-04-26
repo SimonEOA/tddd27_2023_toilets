@@ -1,14 +1,20 @@
 import { useEffect, useState } from "react";
 import { LayerGroup, useMapEvent, useMapEvents } from "react-leaflet";
 import { MarkerType, Place } from "../../types/markerTypes";
-import CustomMarker from "./Marker";
+import CustomMarker from "./CustomMarker";
 
 type Props = {
   markers: Place[];
   add: boolean;
-  currentMarker: (marker: Place) => void;
+  setCurrentMarker: (marker: Place) => void;
+  currentMarker: Place;
 };
-export const Markers: React.FC<Props> = ({ add, currentMarker, markers }) => {
+export const Markers: React.FC<Props> = ({
+  add,
+  setCurrentMarker,
+  markers,
+  currentMarker,
+}) => {
   const [places, setPlaces] = useState<Place[]>(markers);
   const [popupOpen, setPopupOpen] = useState(false);
 
@@ -23,9 +29,14 @@ export const Markers: React.FC<Props> = ({ add, currentMarker, markers }) => {
           latitude: e.latlng.lat,
           longitude: e.latlng.lng,
           verified: false,
+          rating: 5,
         },
       ]);
     }
+  });
+
+  const map2 = useMapEvent("popupclose", (e) => {
+    setCurrentMarker(null);
   });
 
   const handlePopupOpen = (open: boolean) => {
@@ -48,6 +59,7 @@ export const Markers: React.FC<Props> = ({ add, currentMarker, markers }) => {
         <CustomMarker
           key={place.id}
           place={place}
+          setCurrentMarker={setCurrentMarker}
           currentMarker={currentMarker}
           onRemove={() => handleMarkerRemove(index)}
           onOpen={handlePopupOpen}
