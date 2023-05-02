@@ -17,30 +17,6 @@ import * as GeoSearch from "leaflet-geosearch";
 import { GeoSearchControl, MapBoxProvider } from "leaflet-geosearch";
 import { useMap } from "react-leaflet";
 
-const customStyles = {
-  input: {
-    borderRadius: "md",
-    borderColor: "gray.300",
-    borderWidth: "1px",
-    px: 2,
-    py: 1,
-  },
-  suggestions: {
-    borderRadius: "md",
-    boxShadow: "lg",
-    bg: "white",
-    zIndex: "popover",
-    mt: 2,
-  },
-  suggestionItem: {
-    px: 2,
-    py: 1,
-    _hover: {
-      bg: "gray.100",
-    },
-  },
-};
-
 const SearchField = () => {
   const provider = new OpenStreetMapProvider();
 
@@ -74,11 +50,6 @@ const Map = ({ width, height }: { width: string; height: string }) => {
   const [loading, setLoading] = useState(false);
   const [markers, setMarkers] = useState<Place[]>([]);
   const provider = new GeoSearch.OpenStreetMapProvider();
-
-  // you want to get it of the window global
-  const search = GeoSearch.SearchControl({
-    provider: provider,
-  });
 
   const currentMarker = (marker: string) => {
     setMarker(marker);
