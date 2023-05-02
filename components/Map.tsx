@@ -30,6 +30,7 @@ const SearchField = () => {
     keepResult: false,
     searchLabel: "search",
     keepOpen: false,
+    position: "topright",
   });
 
   const map = useMap();
