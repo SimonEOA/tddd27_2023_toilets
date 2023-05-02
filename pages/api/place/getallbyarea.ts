@@ -1,40 +1,30 @@
 import { PrismaClient } from '@prisma/client';
 
 export default async function handler(req, res) {
-  const prisma = new PrismaClient();
-  const { _southWest, _northEast } = req.body;
+    const prisma = new PrismaClient();
+    const { nelat, nelng, swlat, swlng} = req.query;
 
+   
   try {
     const places = await prisma.place.findMany({
         where: {
-            AND: [
-                {
-                    latitude: {
-                        gte: _southWest.lat,
-                    },
-                },
-                {
-                    latitude: {
-                        lte: _northEast.lat,
-                    },
-                },
-                {
-                    longitude: {
-                        gte: _southWest.lng,
-
-                    },
-                },
-                {
-                    longitude: {
-
-                        lte: _northEast.lng,
-                    },
-                },
-                
-            ],
-          },
-        });
-    // console.log(places);
+          AND: [
+            {
+              AND: [
+                { latitude: { gte: parseFloat(swlat) } },
+                { latitude: { lte: parseFloat(nelat) } },
+              ],
+            },
+            {
+              AND: [
+                { longitude: { gte: parseFloat(swlng) } },
+                { longitude: { lte: parseFloat(nelng) } },
+              ],
+            },
+          ],
+        },
+      });
+    
     res.status(200).json(places);
     return places;
   } catch (e) {

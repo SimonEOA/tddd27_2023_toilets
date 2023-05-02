@@ -1,38 +1,84 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  LayerGroup,
   MapContainer,
   TileLayer,
   ZoomControl,
   useMapEvent,
   useMapEvents,
 } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
 
 import { Markers } from "./Markers/Markes";
 import { Place, Point } from "../types/markerTypes";
 import { Button, Box, Text, Center } from "@chakra-ui/react";
 import Header from "./Header";
+import axios from "axios";
+import { OpenStreetMapProvider } from "leaflet-geosearch";
+import * as GeoSearch from "leaflet-geosearch";
+import { GeoSearchControl, MapBoxProvider } from "leaflet-geosearch";
+import { useMap } from "react-leaflet";
 
-const Map = ({
-  width,
-  height,
-  markers,
-}: {
-  width: string;
-  height: string;
-  markers: Place[];
-}) => {
-  const [geoData, setGeoData] = useState<Point>({
-    lat: markers[markers.length - 1].latitude,
-    lng: markers[markers.length - 1].longitude,
+const customStyles = {
+  input: {
+    borderRadius: "md",
+    borderColor: "gray.300",
+    borderWidth: "1px",
+    px: 2,
+    py: 1,
+  },
+  suggestions: {
+    borderRadius: "md",
+    boxShadow: "lg",
+    bg: "white",
+    zIndex: "popover",
+    mt: 2,
+  },
+  suggestionItem: {
+    px: 2,
+    py: 1,
+    _hover: {
+      bg: "gray.100",
+    },
+  },
+};
+
+const SearchField = () => {
+  const provider = new OpenStreetMapProvider();
+
+  const searchControl = GeoSearchControl({
+    provider: provider,
+
+    ZoomControl: true,
+    autoClose: true,
+    retainZoomLevel: false,
+    animateZoom: true,
+    keepResult: false,
+    searchLabel: "search",
+    keepOpen: false,
   });
+
+  const map = useMap();
+  useEffect(() => {
+    map.addControl(searchControl);
+    return () => {
+      map.removeControl(searchControl);
+    };
+  }, []);
+
+  return null;
+};
+
+const Map = ({ width, height }: { width: string; height: string }) => {
+  const [geoData, setGeoData] = useState<Point>({ lat: 63, lng: 16 });
   const [addMarker, setAddMarker] = useState(false);
   const [marker, setMarker] = useState("");
-  const [popupOpen, setPopupOpen] = useState(false);
-  const [position, setPosition] = useState<number[]>([]);
-  const [bounds, setBounds] = useState(null);
-  const [places, setPlaces] = useState<Place[]>(markers);
+  const [loading, setLoading] = useState(false);
+  const [markers, setMarkers] = useState<Place[]>([]);
+  const provider = new GeoSearch.OpenStreetMapProvider();
+
+  // you want to get it of the window global
+  const search = GeoSearch.SearchControl({
+    provider: provider,
+  });
 
   const currentMarker = (marker: string) => {
     setMarker(marker);
@@ -41,27 +87,16 @@ const Map = ({
 
   const handleFlyTo = (position: number[]) => {
     if (mapRef.current == null) return;
+    mapRef.current.getCenter();
     const newPosition = [position[0], position[1]]; // The coordinates of Berlin
     const zoomLevel = 13; // The zoom level for the map
-    mapRef.current.flyTo(newPosition, zoomLevel);
-  };
 
-  const handleViewportChanged = async () => {
-    const map = mapRef.current;
-    const bounds = map.getBounds();
-    setBounds(bounds);
-    console.log(bounds);
-    const res = await fetch("http://localhost:3000/api/place/getallbyarea", {
-      method: "POST",
-      body: JSON.stringify(bounds),
-    });
-    const data = await res.json();
-    setPlaces(data);
+    mapRef.current.setView(newPosition, zoomLevel);
   };
+  if (loading) return <p>Loading...</p>;
 
   return (
     <Box pos={"relative"}>
-      <Header markers={markers} handleFly={handleFlyTo} />
       <MapContainer
         center={[geoData.lat, geoData.lng]}
         zoom={13}
@@ -75,10 +110,12 @@ const Map = ({
         zoomControl={false}
         ref={mapRef}
       >
-        <MapViewportListener onViewportChanged={handleViewportChanged} />
+        <SearchField />
         <TileLayer
           attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
           url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+          // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          // url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
         <Markers
@@ -106,9 +143,6 @@ const Map = ({
   );
 };
 export default Map;
-
-function MapViewportListener({ onViewportChanged }) {
-  useMapEvent("moveend", onViewportChanged);
-  useMapEvent("zoomend", onViewportChanged);
-  return null;
+function useLeaflet(): { map: any } {
+  throw new Error("Function not implemented.");
 }

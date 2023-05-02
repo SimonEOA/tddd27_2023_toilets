@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { on } from "events";
 import { useRouter } from "next/router";
+import { marker } from "leaflet";
 
 const ToiletIcon = new Icon({
   iconUrl: "/002-bathroom.png",
@@ -33,6 +34,7 @@ export default function CustomMarker({
   const [popupOpen, setPopupOpen] = useState(false);
   const [address, setAddress] = useState("");
   const markerRef = useRef(null);
+  const popupref = useRef(null);
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -42,20 +44,15 @@ export default function CustomMarker({
   }
 
   function handlePopupClose() {
-    if (!place.verified) {
-      handleRemove();
-    }
     onOpen(false);
   }
 
   const handleRemove = () => {
     onRemove();
   };
-
+  const map = useMap();
   useEffect(() => {
-    if (markerRef.current) {
-      markerRef.current.openPopup();
-    }
+    markerRef.current.openPopup();
   }, []);
 
   const addPlace = async () => {
@@ -92,6 +89,10 @@ export default function CustomMarker({
     }
   };
 
+  const handleClick = (e) => {
+    // map.flyTo(e.latlng, 18);
+  };
+
   const point: Point = { lat: place.latitude, lng: place.longitude };
   return (
     <Marker
@@ -100,10 +101,13 @@ export default function CustomMarker({
       eventHandlers={{
         popupopen: () => handlePopupOpen(),
         popupclose: () => handlePopupClose(),
+        click: (e) => {
+          handleClick(e);
+        },
       }}
       ref={markerRef}
     >
-      <Popup>
+      <Popup ref={popupref}>
         {!place.verified ? (
           <Flex
             direction="row"
