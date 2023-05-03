@@ -18,7 +18,8 @@ const ToiletIcon = new Icon({
 
 interface CustomMarkerProps {
   place: Place;
-  currentMarker: (marker: string) => void;
+  setCurrentMarker: (marker: Place) => void;
+  currentMarker: Place;
   onRemove: () => void;
   onOpen: (open: boolean) => void;
   handlePlaces: (place: Place) => void;
@@ -26,6 +27,7 @@ interface CustomMarkerProps {
 
 export default function CustomMarker({
   place,
+  setCurrentMarker,
   currentMarker,
   onRemove,
   onOpen,
@@ -39,7 +41,7 @@ export default function CustomMarker({
   const router = useRouter();
 
   function handlePopupOpen() {
-    currentMarker(place.address);
+    setCurrentMarker(place);
     onOpen(true);
   }
 
@@ -61,16 +63,7 @@ export default function CustomMarker({
     else {
       const res = await fetch("/api/place/create", {
         method: "POST",
-        body: JSON.stringify({
-          name: session.user.name,
-          address: address,
-          attributes: ["test"],
-          rating: 5,
-          longitude: place.longitude,
-          latitude: place.latitude,
-          ownerId: session.user.id,
-          verified: true,
-        }),
+        body: JSON.stringify(place),
         headers: {
           "Content-Type": "application/json",
         },
@@ -84,6 +77,7 @@ export default function CustomMarker({
         longitude: data.longitude,
         latitude: data.latitude,
         verified: true,
+        rating: data.rating,
       };
       handlePlaces(newPLace);
     }
@@ -116,13 +110,11 @@ export default function CustomMarker({
             w={300}
             h={100}
           >
-            <Input
-              placeholder="Name"
-              onChange={(e) => {
-                setAddress(e.target.value);
-              }}
-            ></Input>
-            <Button onClick={() => addPlace()}>Add Place</Button>
+            <Box>
+              {currentMarker?.address ?? "Placeholder address"}
+              <br />
+              {currentMarker?.name ?? "Placeholder name"}
+            </Box>
           </Flex>
         ) : (
           <Flex

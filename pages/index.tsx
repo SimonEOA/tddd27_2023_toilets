@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import dynamic from "next/dynamic";
-import { Button, Spacer, VStack } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
-import axios from "axios";
+import { VStack } from "@chakra-ui/react";
+
 import { Place } from "../types/markerTypes";
 import Header from "../components/Header";
 import Map from "../components/Map";

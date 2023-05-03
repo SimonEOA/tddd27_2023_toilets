@@ -7,6 +7,8 @@ import {
   useMapEvents,
 } from "react-leaflet";
 
+import "leaflet/dist/leaflet.css";
+
 import { Markers } from "./Markers/Markes";
 import { Place, Point } from "../types/markerTypes";
 import { Button, Box, Text, Center } from "@chakra-ui/react";
@@ -16,6 +18,7 @@ import { OpenStreetMapProvider } from "leaflet-geosearch";
 import * as GeoSearch from "leaflet-geosearch";
 import { GeoSearchControl, MapBoxProvider } from "leaflet-geosearch";
 import { useMap } from "react-leaflet";
+import SideInfo from "./SideInfo";
 
 const SearchField = () => {
   const provider = new OpenStreetMapProvider();
@@ -47,12 +50,12 @@ const SearchField = () => {
 const Map = ({ width, height }: { width: string; height: string }) => {
   const [geoData, setGeoData] = useState<Point>({ lat: 63, lng: 16 });
   const [addMarker, setAddMarker] = useState(false);
-  const [marker, setMarker] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [marker, setMarker] = useState<Place>(null);
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [position, setPosition] = useState<number[]>([]);
   const [markers, setMarkers] = useState<Place[]>([]);
-  const provider = new GeoSearch.OpenStreetMapProvider();
 
-  const currentMarker = (marker: string) => {
+  const currentMarker = (marker: Place) => {
     setMarker(marker);
   };
   const mapRef = useRef(null); // Create a ref for the map instance
@@ -65,10 +68,10 @@ const Map = ({ width, height }: { width: string; height: string }) => {
 
     mapRef.current.setView(newPosition, zoomLevel);
   };
-  if (loading) return <p>Loading...</p>;
 
   return (
     <Box pos={"relative"}>
+      <SideInfo place={marker} setCurrentPlace={setMarker}></SideInfo>
       <MapContainer
         center={[geoData.lat, geoData.lng]}
         zoom={13}
@@ -92,7 +95,8 @@ const Map = ({ width, height }: { width: string; height: string }) => {
 
         <Markers
           add={addMarker}
-          currentMarker={currentMarker}
+          setCurrentMarker={setMarker}
+          currentMarker={marker}
           markers={markers}
         />
 
@@ -107,10 +111,6 @@ const Map = ({ width, height }: { width: string; height: string }) => {
       >
         {!addMarker ? "Add markers" : "Stop adding markers"}
       </Button>
-
-      <Center>
-        <Text>{marker}</Text>
-      </Center>
     </Box>
   );
 };

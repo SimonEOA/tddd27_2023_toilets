@@ -1,4 +1,4 @@
-import { Button, Grid, Heading } from "@chakra-ui/react";
+import { Button, Grid, HStack, Heading, Text } from "@chakra-ui/react";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 interface HeaderProps {}
@@ -17,9 +17,10 @@ export default function Header() {
           Login
         </Button>
       ) : (
-        <Button justifySelf={"flex-end"} mr={10} onClick={() => signOut()}>
-          Logout
-        </Button>
+        <HStack justifySelf={"flex-end"} mr={10}>
+          <Text>{session.user.name}</Text>
+          <Button onClick={() => signOut()}>Logout</Button>
+        </HStack>
       )}
     </Grid>
   );
