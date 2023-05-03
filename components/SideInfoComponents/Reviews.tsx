@@ -77,7 +77,6 @@ export const Reviews = ({ place }: { place: Place }) => {
 
     setRatings(data.ratingCounts);
     setHighestRating(data.highest);
-    console.log(data);
   };
 
   useEffect(() => {
@@ -155,7 +154,6 @@ export const Reviews = ({ place }: { place: Place }) => {
           </HStack>
           <Divider />
           {reviews.map((review) => {
-            console.log(review);
             return (
               <Stack key={review.id}>
                 <HStack justify={"space-between"}>
@@ -213,6 +211,7 @@ export const Reviews = ({ place }: { place: Place }) => {
                     onClick={() => {
                       setRating(index);
                     }}
+                    cursor={"pointer"}
                   />
                 );
               })}
