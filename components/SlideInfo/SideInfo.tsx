@@ -17,7 +17,7 @@ import {
   TabPanel,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
-import useOpenClose from "../hooks/useOpenClose";
+import useOpenClose from "../../hooks/useOpenClose";
 import {
   DeleteIcon,
   MoonIcon,
@@ -25,9 +25,10 @@ import {
   StarIcon,
   SunIcon,
 } from "@chakra-ui/icons";
-import { Reviews } from "./SideInfoComponents/Reviews";
-import { CreatePlace } from "./SideInfoComponents/CreatePlace";
-import { Place } from "../types/markerTypes";
+import { Reviews } from "../SlideInfoComponents/components/Reviews";
+import { CreatePlace } from "../SlideInfoComponents/components/CreatePlace";
+import { Place } from "../../types/markerTypes";
+import AttributesShower from "../SlideInfoComponents/components/AttributesShower";
 
 const SideInfo = ({
   place,
@@ -37,12 +38,14 @@ const SideInfo = ({
   setCurrentPlace: React.Dispatch<React.SetStateAction<Place>>;
 }) => {
   const { isOpen, toggle, close, open } = useOpenClose();
+  const [attributes, setAttributes] = useState<string[]>([]);
 
   useEffect(() => {
     if (!place) {
       close();
     } else {
       open();
+      setAttributes(place.attributes);
     }
   }, [place]);
 
@@ -109,7 +112,7 @@ const SideInfo = ({
                       </Text>
                       <Divider my="10px" />
                       {place?.attributes?.map((attr) => {})}
-                      <VStack>
+                      {/* <VStack>
                         <HStack w="100%">
                           <PhoneIcon />
                           <Text>Phone</Text>
@@ -126,7 +129,8 @@ const SideInfo = ({
                           <SunIcon />
                           <Text>Day Open</Text>
                         </HStack>
-                      </VStack>
+                      </VStack> */}
+                      <AttributesShower attributes={attributes} />
                     </Flex>
                   </TabPanel>
                   <TabPanel>

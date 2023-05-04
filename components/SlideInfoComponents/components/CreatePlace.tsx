@@ -9,9 +9,10 @@ import {
   Button,
   IconButton,
 } from "@chakra-ui/react";
-import { Dispatch, SetStateAction, useState } from "react";
-import { Place } from "../../types/markerTypes";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Place } from "../../../types/markerTypes";
 import { useSession } from "next-auth/react";
+import Attributes from "./AttributesSelector";
 
 export const CreatePlace = ({
   place,
@@ -23,6 +24,7 @@ export const CreatePlace = ({
   const [name, setName] = useState<string>(place?.name);
   const [address, setAddress] = useState<string>(place?.address);
   const [description, setDescription] = useState<string>(place?.description);
+  const [attributes, setAttributes] = useState<string[]>();
 
   const { data: session, status } = useSession();
 
@@ -36,7 +38,7 @@ export const CreatePlace = ({
         body: JSON.stringify({
           name: session.user.name,
           address: place.address,
-          attributes: place.attributes,
+          attributes: attributes,
           rating: 5,
           longitude: place.longitude,
           latitude: place.latitude,
@@ -95,12 +97,7 @@ export const CreatePlace = ({
       </Stack>
       <Stack justify={"space-between"} w="90%" mt="10px">
         <Text fontSize="md">Attributes</Text>
-        <Flex>
-          <IconButton icon={<PhoneIcon />} aria-label="Add tag" />
-          <IconButton icon={<MoonIcon />} aria-label="Add tag" />
-          <IconButton icon={<DeleteIcon />} aria-label="Add tag" />
-          <IconButton icon={<SunIcon />} aria-label="Add tag" />
-        </Flex>
+        <Attributes setAttributes={setAttributes} />
       </Stack>
       <Button mt="10px" onClick={addPlace}>
         Save

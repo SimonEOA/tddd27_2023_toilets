@@ -18,7 +18,7 @@ import { OpenStreetMapProvider } from "leaflet-geosearch";
 import * as GeoSearch from "leaflet-geosearch";
 import { GeoSearchControl, MapBoxProvider } from "leaflet-geosearch";
 import { useMap } from "react-leaflet";
-import SideInfo from "./SideInfo";
+import SideInfo from "./SlideInfo/SideInfo";
 
 const SearchField = () => {
   const provider = new OpenStreetMapProvider();

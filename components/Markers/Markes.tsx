@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { LayerGroup, useMap, useMapEvent, useMapEvents } from "react-leaflet";
 import { MarkerType, Place } from "../../types/markerTypes";
 import CustomMarker from "./CustomMarker";
-import axios from "axios";
 import { LatLng } from "leaflet";
+import axios from "axios";
 
 type Props = {
   markers: Place[];
@@ -23,39 +23,40 @@ export const Markers: React.FC<Props> = ({
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [tempPlace, setTempPlace] = useState<Place>(null);
   const map = useMap();
-  // useMapEvent("click", (e) => {
-  //   console.log(add, popupOpen, "YO");
-  //   if (add && !popupOpen) {
-  //     // if tmpPlace is not null then remove it from the map
-  //     if (tempPlace) {
-  //       setPlaces((prevMarkers) =>
-  //         prevMarkers.filter((_, index) => index !== prevMarkers.length - 1)
-  //       );
-  //     }
-  //     setPlaces((prevMarkers) => [
-  //       ...prevMarkers,
-  //       {
-  //         id: null,
-  //         name: null,
-  //         address: null,
-  //         latitude: e.latlng.lat,
-  //         longitude: e.latlng.lng,
-  //         verified: false,
-  //         attributes: [],
-  //         rating: 0,
-  //       },
-  //     ]);
-  //     setTempPlace({
-  //       id: "test",
-  //       name: "test",
-  //       address: "test",
-  //       latitude: e.latlng.lat,
-  //       longitude: e.latlng.lng,
-  //       verified: false,
-  //     });
-  //     console.log("places", places);
-  //   }
-  // });
+  useMapEvent("click", (e) => {
+    console.log(add, popupOpen, "YO");
+    if (add && !popupOpen) {
+      // if tmpPlace is not null then remove it from the map
+      if (tempPlace) {
+        setPlaces((prevMarkers) =>
+          prevMarkers.filter((_, index) => index !== prevMarkers.length - 1)
+        );
+      }
+      setPlaces((prevMarkers) => [
+        ...prevMarkers,
+        {
+          id: null,
+          name: null,
+          address: null,
+          latitude: e.latlng.lat,
+          longitude: e.latlng.lng,
+          verified: false,
+          attributes: [],
+          rating: 0,
+        },
+      ]);
+      setTempPlace({
+        id: "test",
+        name: "test",
+        address: "test",
+        latitude: e.latlng.lat,
+        longitude: e.latlng.lng,
+        rating: 0,
+        verified: false,
+      });
+      console.log("places", places);
+    }
+  });
 
   const map2 = useMapEvent("popupclose", (e) => {
     setCurrentMarker(null);
