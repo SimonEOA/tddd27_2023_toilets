@@ -8,6 +8,7 @@ import {
 } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
+import "leaflet-geosearch/dist/geosearch.css";
 
 import { Markers } from "./Markers/Markes";
 import { Place, Point } from "../types/markerTypes";
@@ -25,7 +26,6 @@ const SearchField = () => {
 
   const searchControl = GeoSearchControl({
     provider: provider,
-
     ZoomControl: true,
     autoClose: true,
     retainZoomLevel: false,
@@ -33,7 +33,7 @@ const SearchField = () => {
     keepResult: false,
     searchLabel: "search",
     keepOpen: false,
-    position: "topright",
+    style: "bar",
   });
 
   const map = useMap();
@@ -51,23 +51,8 @@ const Map = ({ width, height }: { width: string; height: string }) => {
   const [geoData, setGeoData] = useState<Point>({ lat: 63, lng: 16 });
   const [addMarker, setAddMarker] = useState(false);
   const [marker, setMarker] = useState<Place>(null);
-  const [popupOpen, setPopupOpen] = useState(false);
-  const [position, setPosition] = useState<number[]>([]);
+
   const [markers, setMarkers] = useState<Place[]>([]);
-
-  const currentMarker = (marker: Place) => {
-    setMarker(marker);
-  };
-  const mapRef = useRef(null); // Create a ref for the map instance
-
-  const handleFlyTo = (position: number[]) => {
-    if (mapRef.current == null) return;
-    mapRef.current.getCenter();
-    const newPosition = [position[0], position[1]]; // The coordinates of Berlin
-    const zoomLevel = 13; // The zoom level for the map
-
-    mapRef.current.setView(newPosition, zoomLevel);
-  };
 
   return (
     <Box pos={"relative"}>
@@ -83,14 +68,13 @@ const Map = ({ width, height }: { width: string; height: string }) => {
           </p>
         }
         zoomControl={false}
-        ref={mapRef}
       >
         <SearchField />
         <TileLayer
-          attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-          url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-          // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          // url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          //attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+          //url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
         <Markers
@@ -98,6 +82,7 @@ const Map = ({ width, height }: { width: string; height: string }) => {
           setCurrentMarker={setMarker}
           currentMarker={marker}
           markers={markers}
+          setPlaces={setMarkers}
         />
 
         <ZoomControl position="bottomright" />

@@ -15,7 +15,7 @@ import {
 import { Review, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { Place } from "../../../types/markerTypes";
+import { Place } from "../../types/markerTypes";
 
 interface ReviewCount {
   rating: number;

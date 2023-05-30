@@ -10,7 +10,7 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Place } from "../../../types/markerTypes";
+import { Place } from "../../types/markerTypes";
 import { useSession } from "next-auth/react";
 import Attributes from "./AttributesSelector";
 
@@ -52,17 +52,15 @@ export const CreatePlace = ({
       console.log(res);
 
       const data = await res.json();
-      const newPLace: Place = {
-        id: data.id,
-        name: data.name,
-        address: data.address,
-        longitude: data.longitude,
-        latitude: data.latitude,
-        verified: true,
-        rating: data.rating,
-      };
-      //handlePlaces(newPLace);
     }
+  };
+
+  const updateAttributes = (attributes: string[]) => {
+    setAttributes(attributes);
+    setCurrentPlace((prev) => ({
+      ...prev,
+      attributes: attributes,
+    }));
   };
 
   return (
@@ -97,7 +95,7 @@ export const CreatePlace = ({
       </Stack>
       <Stack justify={"space-between"} w="90%" mt="10px">
         <Text fontSize="md">Attributes</Text>
-        <Attributes setAttributes={setAttributes} />
+        <Attributes updateAttributes={updateAttributes} />
       </Stack>
       <Button mt="10px" onClick={addPlace}>
         Save

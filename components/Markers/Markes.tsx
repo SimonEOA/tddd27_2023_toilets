@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { LayerGroup, useMap, useMapEvent, useMapEvents } from "react-leaflet";
 import { MarkerType, Place } from "../../types/markerTypes";
 import CustomMarker from "./CustomMarker";
@@ -10,31 +10,25 @@ type Props = {
   add: boolean;
   setCurrentMarker: (marker: Place) => void;
   currentMarker: Place;
+  setPlaces: Dispatch<SetStateAction<Place[]>>;
 };
 export const Markers: React.FC<Props> = ({
   add,
   setCurrentMarker,
   markers,
+  setPlaces,
   currentMarker,
 }) => {
-  const [places, setPlaces] = useState<Place[]>(markers);
   const [popupOpen, setPopupOpen] = useState(false);
   const [isPanning, setIsPanning] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [tempPlace, setTempPlace] = useState<Place>(null);
   const map = useMap();
   useMapEvent("click", (e) => {
-    console.log(add, popupOpen, "YO");
     if (add && !popupOpen) {
       // if tmpPlace is not null then remove it from the map
-      if (tempPlace) {
-        setPlaces((prevMarkers) =>
-          prevMarkers.filter((_, index) => index !== prevMarkers.length - 1)
-        );
-      }
-      setPlaces((prevMarkers) => [
-        ...prevMarkers,
-        {
+      if (tempPlace == null) {
+        const tempPlace = {
           id: null,
           name: null,
           address: null,
@@ -43,40 +37,41 @@ export const Markers: React.FC<Props> = ({
           verified: false,
           attributes: [],
           rating: 0,
-        },
-      ]);
-      setTempPlace({
-        id: "test",
-        name: "test",
-        address: "test",
-        latitude: e.latlng.lat,
-        longitude: e.latlng.lng,
-        rating: 0,
-        verified: false,
-      });
-      console.log("places", places);
+        };
+
+        setPlaces((prevMarkers) => [...prevMarkers, tempPlace]);
+        setCurrentMarker(tempPlace);
+        setTempPlace(tempPlace);
+      }
     }
   });
 
-  const map2 = useMapEvent("popupclose", (e) => {
-    setCurrentMarker(null);
-  });
-
   const handlePopupOpen = (open: boolean) => {
-    console.log("open", open);
     setPopupOpen(open);
   };
 
   const handleMarkerRemove = (indexToRemove) => {
-    console.log("index", indexToRemove);
-    console.log("places", places);
     setPlaces((prevMarkers) =>
       prevMarkers.filter((_, index) => index !== indexToRemove - 1)
     );
   };
 
   const handlePlaces = (place: Place) => {
-    setPlaces([...places, place]);
+    setPlaces([...markers, place]);
+  };
+
+  const handlePopupClose = () => {
+    console.log("popup closed");
+    if (currentMarker !== null) {
+      if (!currentMarker?.verified) {
+        setTempPlace(currentMarker);
+        setPlaces((prevMarkers) =>
+          prevMarkers.filter((marker) => marker.id !== null)
+        );
+        setPlaces((prevMarkers) => [...prevMarkers, currentMarker]);
+        setCurrentMarker(null);
+      }
+    }
   };
 
   useEffect(() => {
@@ -112,8 +107,9 @@ export const Markers: React.FC<Props> = ({
       `api/place/getallbyarea?nelat=${ne.lat}&nelng=${ne.lng}&swlat=${sw.lat}&swlng=${sw.lng}`
     );
     const data = await response.data;
+    console.log("here", currentMarker);
     if (tempPlace !== null) {
-      data.push(tempPlace);
+      data.push(currentMarker);
     }
     setPlaces(data);
   };
@@ -132,7 +128,7 @@ export const Markers: React.FC<Props> = ({
 
   return (
     <LayerGroup>
-      {places.map((place, index) => (
+      {markers.map((place, index) => (
         <CustomMarker
           key={index}
           place={place}
@@ -140,7 +136,7 @@ export const Markers: React.FC<Props> = ({
           currentMarker={currentMarker}
           onRemove={() => handleMarkerRemove(index)}
           onOpen={handlePopupOpen}
-          handlePlaces={handlePlaces}
+          onClosed={handlePopupClose}
         ></CustomMarker>
       ))}
     </LayerGroup>

@@ -25,10 +25,10 @@ import {
   StarIcon,
   SunIcon,
 } from "@chakra-ui/icons";
-import { Reviews } from "../SlideInfoComponents/components/Reviews";
-import { CreatePlace } from "../SlideInfoComponents/components/CreatePlace";
+import { Reviews } from "../SlideInfoComponents/Reviews";
+import { CreatePlace } from "../SlideInfoComponents/CreatePlace";
 import { Place } from "../../types/markerTypes";
-import AttributesShower from "../SlideInfoComponents/components/AttributesShower";
+import AttributesShower from "../SlideInfoComponents/AttributesShower";
 
 const SideInfo = ({
   place,
@@ -49,6 +49,9 @@ const SideInfo = ({
     }
   }, [place]);
 
+  useEffect(() => {
+    console.log("open", isOpen);
+  }, [isOpen]);
   return (
     <HStack justify={"center"}>
       <Box
@@ -111,25 +114,7 @@ const SideInfo = ({
                         }
                       </Text>
                       <Divider my="10px" />
-                      {place?.attributes?.map((attr) => {})}
-                      {/* <VStack>
-                        <HStack w="100%">
-                          <PhoneIcon />
-                          <Text>Phone</Text>
-                        </HStack>
-                        <HStack w="100%">
-                          <MoonIcon />
-                          <Text>Night Open</Text>
-                        </HStack>
-                        <HStack w="100%">
-                          <DeleteIcon />
-                          <Text>Trash</Text>
-                        </HStack>
-                        <HStack w="100%">
-                          <SunIcon />
-                          <Text>Day Open</Text>
-                        </HStack>
-                      </VStack> */}
+
                       <AttributesShower attributes={attributes} />
                     </Flex>
                   </TabPanel>

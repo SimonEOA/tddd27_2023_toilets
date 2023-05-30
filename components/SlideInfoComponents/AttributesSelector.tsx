@@ -8,29 +8,31 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { ATTRIBUTE_IMAGES } from "../../Attributes";
+import { ATTRIBUTE_IMAGES } from "../Attributes";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import useOpenClose from "../../hooks/useOpenClose";
 
 interface AttributesProps {
-  setAttributes: any;
+  updateAttributes: (attributes: string[]) => void;
 }
 
-export default function AttributesSelector({ setAttributes }: AttributesProps) {
+export default function AttributesSelector({
+  updateAttributes,
+}: AttributesProps) {
   const [selectedImages, setSelectedImages] = useState([]);
+  const { isOpen, toggle, close, open } = useOpenClose();
 
   const handleImageClick = (key) => {
-    setSelectedImages((prevSelectedImages) => {
-      if (prevSelectedImages.includes(key)) {
-        // If the image is already selected, remove it from the array
-        return prevSelectedImages.filter((selectedKey) => selectedKey !== key);
-      } else {
-        // If the image is not selected, add it to the array
-        return [...prevSelectedImages, key];
-      }
-    });
-    setAttributes([...selectedImages, key]);
+    if (selectedImages.includes(key)) {
+      setSelectedImages((prev) => prev.filter((item) => item !== key));
+      updateAttributes(selectedImages.filter((item) => item !== key));
+    } else {
+      setSelectedImages((prev) => [...prev, key]);
+      updateAttributes([...selectedImages, key]);
+    }
   };
+
   const { data: session, status } = useSession();
 
   return (

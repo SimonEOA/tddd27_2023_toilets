@@ -8,6 +8,9 @@ import { useSession } from "next-auth/react";
 import { on } from "events";
 import { useRouter } from "next/router";
 import { marker } from "leaflet";
+import { ATTRIBUTE_IMAGES } from "../Attributes";
+import AttributesShower from "../SlideInfoComponents/AttributesShower";
+import CustomPopupBox from "./CustomPopupBox";
 
 const ToiletIcon = new Icon({
   iconUrl: "/002-bathroom.png",
@@ -22,7 +25,7 @@ interface CustomMarkerProps {
   currentMarker: Place;
   onRemove: () => void;
   onOpen: (open: boolean) => void;
-  handlePlaces: (place: Place) => void;
+  onClosed: () => void;
 }
 
 export default function CustomMarker({
@@ -31,7 +34,7 @@ export default function CustomMarker({
   currentMarker,
   onRemove,
   onOpen,
-  handlePlaces,
+  onClosed,
 }: CustomMarkerProps) {
   const [popupOpen, setPopupOpen] = useState(false);
   const [address, setAddress] = useState("");
@@ -47,45 +50,13 @@ export default function CustomMarker({
 
   function handlePopupClose() {
     onOpen(false);
+    onClosed();
   }
 
-  const handleRemove = () => {
-    onRemove();
-  };
   const map = useMap();
   useEffect(() => {
     markerRef.current.openPopup();
   }, []);
-
-  const addPlace = async () => {
-    if (!session) console.log("Not logged in");
-    else if (place.verified) console.log("Place already verified");
-    else {
-      const res = await fetch("/api/place/create", {
-        method: "POST",
-        body: JSON.stringify(place),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await res.json();
-      const newPLace: Place = {
-        id: data.id,
-        name: data.name,
-        address: data.address,
-        longitude: data.longitude,
-        latitude: data.latitude,
-        verified: true,
-        rating: data.rating,
-      };
-      handlePlaces(newPLace);
-    }
-  };
-
-  const handleClick = (e) => {
-    // map.flyTo(e.latlng, 18);
-  };
 
   const point: Point = { lat: place.latitude, lng: place.longitude };
   return (
@@ -95,43 +66,14 @@ export default function CustomMarker({
       eventHandlers={{
         popupopen: () => handlePopupOpen(),
         popupclose: () => handlePopupClose(),
-        click: (e) => {
-          handleClick(e);
-        },
       }}
       ref={markerRef}
     >
       <Popup ref={popupref}>
         {!place.verified ? (
-          <Flex
-            direction="row"
-            align="center"
-            justifyContent={"center"}
-            w={300}
-            h={100}
-          >
-            <Box>
-              {currentMarker?.address ?? "Placeholder address"}
-              <br />
-              {currentMarker?.name ?? "Placeholder name"}
-            </Box>
-          </Flex>
+          <CustomPopupBox place={currentMarker} />
         ) : (
-          <Flex
-            direction="column"
-            align="center"
-            justifyContent={"center"}
-            w={300}
-            h={100}
-          >
-            <Image
-              src="/001-public-toilet.png"
-              alt="Picture of the author"
-              width={50}
-              height={50}
-            />
-            <Text>{place.address + " by " + place.name}</Text>
-          </Flex>
+          <CustomPopupBox place={currentMarker} />
         )}
       </Popup>
     </Marker>
