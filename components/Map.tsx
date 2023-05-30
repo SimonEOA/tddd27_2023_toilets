@@ -21,6 +21,8 @@ import { GeoSearchControl, MapBoxProvider } from "leaflet-geosearch";
 import { useMap } from "react-leaflet";
 import SideInfo from "./SlideInfo/SideInfo";
 import { ActionButton } from "./ActionButton/ActionButton";
+import { MapType, StandardMap } from "../types/mapTypes";
+import MapSelector from "./MapSelector/MapSelector";
 
 const SearchField = () => {
   const provider = new OpenStreetMapProvider();
@@ -53,7 +55,12 @@ const Map = ({ width, height }: { width: string; height: string }) => {
   const [addMarker, setAddMarker] = useState(false);
   const [marker, setMarker] = useState<Place>(null);
   const [markers, setMarkers] = useState<Place[]>([]);
+  const [mapStyle, setMapStyle] = useState<MapType>(StandardMap);
 
+  const handleSetMapStyle = (map: MapType) => {
+    setMapStyle(map);
+    console.log(map);
+  };
   return (
     <Box pos={"relative"}>
       <SideInfo place={marker} setCurrentPlace={setMarker}></SideInfo>
@@ -63,7 +70,8 @@ const Map = ({ width, height }: { width: string; height: string }) => {
         setMarkers={setMarkers}
         markers={markers}
         setMarker={setMarker}
-      />
+      />{" "}
+      <MapSelector handleSetMapStyle={handleSetMapStyle} />
       <Text pos={"absolute"} top={0} right={0} bg={"Red"} zIndex={9999}>
         {addMarker ? "Edit mode +" : ""}
         {marker ? "Editing marker " : ""}
@@ -81,12 +89,7 @@ const Map = ({ width, height }: { width: string; height: string }) => {
         zoomControl={false}
       >
         {!marker && <SearchField />}
-        <TileLayer
-          //attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-          //url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+        <TileLayer attribution={mapStyle.attributes} url={mapStyle.url} />
 
         <Markers
           add={addMarker}
