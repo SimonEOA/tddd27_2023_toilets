@@ -1,14 +1,20 @@
 import { useEffect, useState } from "react";
 import { LayerGroup, useMapEvent, useMapEvents } from "react-leaflet";
 import { MarkerType, Place } from "../../types/markerTypes";
-import CustomMarker from "./Marker";
+import CustomMarker from "./CustomMarker";
 
 type Props = {
   markers: Place[];
   add: boolean;
-  currentMarker: (marker: string) => void;
+  setCurrentMarker: (marker: Place) => void;
+  currentMarker: Place;
 };
-export const Markers: React.FC<Props> = ({ add, currentMarker, markers }) => {
+export const Markers: React.FC<Props> = ({
+  add,
+  setCurrentMarker,
+  markers,
+  currentMarker,
+}) => {
   const [places, setPlaces] = useState<Place[]>(markers);
   const [popupOpen, setPopupOpen] = useState(false);
 
@@ -17,15 +23,21 @@ export const Markers: React.FC<Props> = ({ add, currentMarker, markers }) => {
       setPlaces((prevMarkers) => [
         ...prevMarkers,
         {
-          id: "test",
-          name: "test",
-          address: "test",
+          id: null,
+          name: null,
+          address: null,
           latitude: e.latlng.lat,
           longitude: e.latlng.lng,
           verified: false,
+          attributes: [],
+          rating: 0,
         },
       ]);
     }
+  });
+
+  const map2 = useMapEvent("popupclose", (e) => {
+    setCurrentMarker(null);
   });
 
   const handlePopupOpen = (open: boolean) => {
@@ -48,6 +60,7 @@ export const Markers: React.FC<Props> = ({ add, currentMarker, markers }) => {
         <CustomMarker
           key={place.id}
           place={place}
+          setCurrentMarker={setCurrentMarker}
           currentMarker={currentMarker}
           onRemove={() => handleMarkerRemove(index)}
           onOpen={handlePopupOpen}

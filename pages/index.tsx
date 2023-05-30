@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import "leaflet/dist/leaflet.css";
 import dynamic from "next/dynamic";
-import { Button, Spacer, VStack } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
-import axios from "axios";
+import { VStack } from "@chakra-ui/react";
+
 import { Place } from "../types/markerTypes";
-import Header from "../components/Header";
 
 type Props = {
   markers: Place[];
@@ -17,13 +15,15 @@ const Blog = ({ markers }: Props) => {
   });
 
   return (
-    <VStack h="100%" justifyContent={"center"}>
-      <MapWithNoSSR
-        width="100vw"
-        height="75vh"
-        markers={markers}
-      ></MapWithNoSSR>
-    </VStack>
+    <>
+      <VStack h="100%" justifyContent={"center"}>
+        <MapWithNoSSR
+          width="100vw"
+          height="80vh"
+          markers={markers}
+        ></MapWithNoSSR>
+      </VStack>
+    </>
   );
 };
 

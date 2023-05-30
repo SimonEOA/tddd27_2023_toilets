@@ -1,17 +1,13 @@
-import { useEffect, useRef, useState } from "react";
-import {
-  LayerGroup,
-  MapContainer,
-  TileLayer,
-  ZoomControl,
-  useMapEvents,
-} from "react-leaflet";
+import { useRef, useState } from "react";
+import { MapContainer, TileLayer, ZoomControl } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 import { Markers } from "./Markers/Markes";
-import { Place, Point } from "../types/markerTypes";
+import { Point } from "../types/markerTypes";
 import { Button, Box, Text, Center } from "@chakra-ui/react";
 import Header from "./Header";
+import SideInfo from "./SideInfo";
+import { Place } from "../types/markerTypes";
 
 const Map = ({
   width,
@@ -27,11 +23,11 @@ const Map = ({
     lng: markers[markers.length - 1].longitude,
   });
   const [addMarker, setAddMarker] = useState(false);
-  const [marker, setMarker] = useState("");
+  const [marker, setMarker] = useState<Place>(null);
   const [popupOpen, setPopupOpen] = useState(false);
   const [position, setPosition] = useState<number[]>([]);
 
-  const currentMarker = (marker: string) => {
+  const currentMarker = (marker: Place) => {
     setMarker(marker);
   };
   const mapRef = useRef(null); // Create a ref for the map instance
@@ -46,6 +42,7 @@ const Map = ({
   return (
     <Box pos={"relative"}>
       <Header markers={markers} handleFly={handleFlyTo} />
+      <SideInfo place={marker} setCurrentPlace={setMarker}></SideInfo>
       <MapContainer
         center={[geoData.lat, geoData.lng]}
         zoom={13}
@@ -66,7 +63,8 @@ const Map = ({
 
         <Markers
           add={addMarker}
-          currentMarker={currentMarker}
+          setCurrentMarker={setMarker}
+          currentMarker={marker}
           markers={markers}
         />
 
@@ -81,10 +79,6 @@ const Map = ({
       >
         {!addMarker ? "Add markers" : "Stop adding markers"}
       </Button>
-
-      <Center>
-        <Text>{marker}</Text>
-      </Center>
     </Box>
   );
 };

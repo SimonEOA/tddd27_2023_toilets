@@ -15,5 +15,7 @@ export type Place = {
   latitude: number;
   longitude: number;
   verified: boolean;
+  rating: number;
+  description?: string;
+  attributes?: string[];
 };
-

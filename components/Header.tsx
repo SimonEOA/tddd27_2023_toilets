@@ -1,20 +1,7 @@
-import {
-  Button,
-  Box,
-  Flex,
-  Center,
-  Input,
-  Text,
-  Grid,
-  Heading,
-  Select,
-  VStack,
-} from "@chakra-ui/react";
+import { Button, Text, Grid, Heading, Select, HStack } from "@chakra-ui/react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Place } from "../types/markerTypes";
-import { useMap, useMapEvent, useMapEvents } from "react-leaflet";
-import { useEffect } from "react";
-import { parse } from "path";
+
 interface HeaderProps {
   markers: Place[];
   handleFly: (pos: number[]) => void;
@@ -29,6 +16,7 @@ export default function Header({ markers, handleFly }: HeaderProps) {
       templateColumns="1fr auto 1fr"
       alignItems="center"
       p={2}
+      h="60px"
     >
       <Select
         justifySelf={"flex-start"}
@@ -44,6 +32,7 @@ export default function Header({ markers, handleFly }: HeaderProps) {
             latitude: Number(parseFloat(lat).toFixed(3)),
             longitude: Number(parseFloat(lng).toFixed(3)),
             verified: false,
+            rating: 0,
           };
           handleFly([tempPLace.latitude, tempPLace.longitude]);
         }}
@@ -69,9 +58,10 @@ export default function Header({ markers, handleFly }: HeaderProps) {
           Login
         </Button>
       ) : (
-        <Button justifySelf={"flex-end"} mr={10} onClick={() => signOut()}>
-          Logout
-        </Button>
+        <HStack justifySelf={"flex-end"} mr={10}>
+          <Text>{session.user.name}</Text>
+          <Button onClick={() => signOut()}>Logout</Button>
+        </HStack>
       )}
     </Grid>
   );
