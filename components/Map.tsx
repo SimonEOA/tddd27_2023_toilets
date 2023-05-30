@@ -20,6 +20,7 @@ import * as GeoSearch from "leaflet-geosearch";
 import { GeoSearchControl, MapBoxProvider } from "leaflet-geosearch";
 import { useMap } from "react-leaflet";
 import SideInfo from "./SlideInfo/SideInfo";
+import { ActionButton } from "./ActionButton/ActionButton";
 
 const SearchField = () => {
   const provider = new OpenStreetMapProvider();
@@ -57,6 +58,16 @@ const Map = ({ width, height }: { width: string; height: string }) => {
   return (
     <Box pos={"relative"}>
       <SideInfo place={marker} setCurrentPlace={setMarker}></SideInfo>
+      <ActionButton
+        addMarker={addMarker}
+        setAddMarker={setAddMarker}
+        setMarkers={setMarkers}
+        markers={markers}
+      />
+      <Text pos={"absolute"} top={0} right={0} bg={"Red"} zIndex={9999}>
+        {addMarker ? "Edit mode +" : ""}
+        {marker ? "Editing marker " : ""}
+      </Text>
       <MapContainer
         center={[geoData.lat, geoData.lng]}
         zoom={13}
@@ -69,7 +80,7 @@ const Map = ({ width, height }: { width: string; height: string }) => {
         }
         zoomControl={false}
       >
-        <SearchField />
+        {!marker && <SearchField />}
         <TileLayer
           //attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
           //url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
@@ -87,7 +98,7 @@ const Map = ({ width, height }: { width: string; height: string }) => {
 
         <ZoomControl position="bottomright" />
       </MapContainer>
-      <Button
+      {/* <Button
         w={"100%"}
         mt="5px"
         onClick={() => {
@@ -95,11 +106,8 @@ const Map = ({ width, height }: { width: string; height: string }) => {
         }}
       >
         {!addMarker ? "Add markers" : "Stop adding markers"}
-      </Button>
+      </Button> */}
     </Box>
   );
 };
 export default Map;
-function useLeaflet(): { map: any } {
-  throw new Error("Function not implemented.");
-}

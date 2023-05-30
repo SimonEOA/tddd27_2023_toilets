@@ -12,26 +12,32 @@ import { ATTRIBUTE_IMAGES } from "../Attributes";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import useOpenClose from "../../hooks/useOpenClose";
+import { Place } from "../../types/markerTypes";
 
 interface AttributesProps {
   updateAttributes: (attributes: string[]) => void;
+  place: Place;
 }
 
 export default function AttributesSelector({
   updateAttributes,
+  place,
 }: AttributesProps) {
   const [selectedImages, setSelectedImages] = useState([]);
   const { isOpen, toggle, close, open } = useOpenClose();
 
   const handleImageClick = (key) => {
     if (selectedImages.includes(key)) {
-      setSelectedImages((prev) => prev.filter((item) => item !== key));
       updateAttributes(selectedImages.filter((item) => item !== key));
     } else {
-      setSelectedImages((prev) => [...prev, key]);
       updateAttributes([...selectedImages, key]);
     }
   };
+  useEffect(() => {
+    if (place) {
+      setSelectedImages(place.attributes);
+    }
+  }, [place]);
 
   const { data: session, status } = useSession();
 

@@ -25,13 +25,15 @@ export const Markers: React.FC<Props> = ({
   const [tempPlace, setTempPlace] = useState<Place>(null);
   const map = useMap();
   useMapEvent("click", (e) => {
+    console.log("click", add, popupOpen);
+
     if (add && !popupOpen) {
       // if tmpPlace is not null then remove it from the map
       if (tempPlace == null) {
         const tempPlace = {
           id: null,
-          name: null,
-          address: null,
+          name: "",
+          address: "",
           latitude: e.latlng.lat,
           longitude: e.latlng.lng,
           verified: false,
@@ -43,6 +45,12 @@ export const Markers: React.FC<Props> = ({
         setCurrentMarker(tempPlace);
         setTempPlace(tempPlace);
       }
+    } else {
+      setPlaces((prevMarkers) =>
+        prevMarkers.filter((marker) => marker.id !== null)
+      );
+      setTempPlace(null);
+      setCurrentMarker(null);
     }
   });
 
@@ -50,10 +58,12 @@ export const Markers: React.FC<Props> = ({
     setPopupOpen(open);
   };
 
-  const handleMarkerRemove = (indexToRemove) => {
+  const handleMarkerRemove = () => {
     setPlaces((prevMarkers) =>
-      prevMarkers.filter((_, index) => index !== indexToRemove - 1)
+      prevMarkers.filter((marker) => marker.id !== null)
     );
+    setTempPlace(null);
+    setCurrentMarker(null);
   };
 
   const handlePlaces = (place: Place) => {
@@ -62,6 +72,7 @@ export const Markers: React.FC<Props> = ({
 
   const handlePopupClose = () => {
     console.log("popup closed");
+    setPopupOpen(false);
     if (currentMarker !== null) {
       if (!currentMarker?.verified) {
         setTempPlace(currentMarker);
@@ -71,6 +82,8 @@ export const Markers: React.FC<Props> = ({
         setPlaces((prevMarkers) => [...prevMarkers, currentMarker]);
         setCurrentMarker(null);
       }
+    } else {
+      setCurrentMarker(null);
     }
   };
 
@@ -101,8 +114,6 @@ export const Markers: React.FC<Props> = ({
   }, [timeRemaining]);
 
   const fetchData = async (ne: LatLng, sw: LatLng) => {
-    console.log(ne.lat, ne.lng, sw.lat, sw.lng);
-    console.log(map.getCenter());
     const response = await axios(
       `api/place/getallbyarea?nelat=${ne.lat}&nelng=${ne.lng}&swlat=${sw.lat}&swlng=${sw.lng}`
     );
@@ -120,11 +131,19 @@ export const Markers: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    map.on("move", handleMove);
-    return () => {
-      map.off("move", handleMove);
-    };
+    if (!popupOpen) {
+      map.on("move", handleMove);
+      return () => {
+        map.off("move", handleMove);
+      };
+    }
   }, [map, handleMove]);
+
+  useEffect(() => {
+    if (currentMarker === null) {
+      setPopupOpen(false);
+    }
+  }, [currentMarker]);
 
   return (
     <LayerGroup>
@@ -134,7 +153,7 @@ export const Markers: React.FC<Props> = ({
           place={place}
           setCurrentMarker={setCurrentMarker}
           currentMarker={currentMarker}
-          onRemove={() => handleMarkerRemove(index)}
+          onRemove={() => handleMarkerRemove()}
           onOpen={handlePopupOpen}
           onClosed={handlePopupClose}
         ></CustomMarker>

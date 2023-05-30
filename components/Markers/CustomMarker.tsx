@@ -46,16 +46,19 @@ export default function CustomMarker({
   function handlePopupOpen() {
     setCurrentMarker(place);
     onOpen(true);
+    setPopupOpen(true);
   }
 
   function handlePopupClose() {
+    setCurrentMarker(null);
     onOpen(false);
     onClosed();
+    setPopupOpen(false);
   }
 
   const map = useMap();
   useEffect(() => {
-    markerRef.current.openPopup();
+    if (currentMarker?.id === null) markerRef.current.openPopup();
   }, []);
 
   const point: Point = { lat: place.latitude, lng: place.longitude };
@@ -66,10 +69,15 @@ export default function CustomMarker({
       eventHandlers={{
         popupopen: () => handlePopupOpen(),
         popupclose: () => handlePopupClose(),
+        click: () => {
+          if (popupOpen) {
+            onRemove();
+          }
+        },
       }}
       ref={markerRef}
     >
-      <Popup ref={popupref}>
+      <Popup ref={popupref} closeButton={false} closeOnEscapeKey={false}>
         {!place.verified ? (
           <CustomPopupBox place={currentMarker} />
         ) : (

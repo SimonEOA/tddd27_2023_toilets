@@ -63,6 +63,10 @@ export const CreatePlace = ({
     }));
   };
 
+  useEffect(() => {
+    console.log("new place", place);
+  }, [place]);
+
   return (
     <Flex w={"100%"} align={"center"} justify={"center"} direction={"column"}>
       <Image fallbackSrc="/001-public-toilet.png" maxW={"100%"} h="250px" />
@@ -72,6 +76,7 @@ export const CreatePlace = ({
         <Input
           placeholder="Write name..."
           size="sm"
+          value={place ? place?.address : ""}
           onChange={(e) => {
             setCurrentPlace((prev) => ({
               ...prev,
@@ -85,6 +90,7 @@ export const CreatePlace = ({
         <Textarea
           placeholder="Write description..."
           size="sm"
+          value={place ? place.description : ""}
           onChange={(e) => {
             setCurrentPlace((prev) => ({
               ...prev,
@@ -95,7 +101,7 @@ export const CreatePlace = ({
       </Stack>
       <Stack justify={"space-between"} w="90%" mt="10px">
         <Text fontSize="md">Attributes</Text>
-        <Attributes updateAttributes={updateAttributes} />
+        <Attributes place={place} updateAttributes={updateAttributes} />
       </Stack>
       <Button mt="10px" onClick={addPlace}>
         Save
