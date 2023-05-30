@@ -8,12 +8,14 @@ type Props = {
   addMarker: boolean;
   markers: Place[];
   setMarkers: React.Dispatch<React.SetStateAction<Place[]>>;
+  setMarker: React.Dispatch<React.SetStateAction<Place>>;
 };
 export const ActionButton: React.FC<Props> = ({
   setAddMarker,
   addMarker,
   markers,
   setMarkers,
+  setMarker,
 }) => {
   const handleAddMarkerClick = () => {
     if (addMarker) {
@@ -24,6 +26,7 @@ export const ActionButton: React.FC<Props> = ({
           );
         }
       }
+      setMarker(null);
     }
     setAddMarker((prev) => !prev);
   };

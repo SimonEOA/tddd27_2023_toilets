@@ -52,7 +52,6 @@ const Map = ({ width, height }: { width: string; height: string }) => {
   const [geoData, setGeoData] = useState<Point>({ lat: 63, lng: 16 });
   const [addMarker, setAddMarker] = useState(false);
   const [marker, setMarker] = useState<Place>(null);
-
   const [markers, setMarkers] = useState<Place[]>([]);
 
   return (
@@ -63,6 +62,7 @@ const Map = ({ width, height }: { width: string; height: string }) => {
         setAddMarker={setAddMarker}
         setMarkers={setMarkers}
         markers={markers}
+        setMarker={setMarker}
       />
       <Text pos={"absolute"} top={0} right={0} bg={"Red"} zIndex={9999}>
         {addMarker ? "Edit mode +" : ""}
@@ -98,15 +98,6 @@ const Map = ({ width, height }: { width: string; height: string }) => {
 
         <ZoomControl position="bottomright" />
       </MapContainer>
-      {/* <Button
-        w={"100%"}
-        mt="5px"
-        onClick={() => {
-          setAddMarker((cur) => !cur);
-        }}
-      >
-        {!addMarker ? "Add markers" : "Stop adding markers"}
-      </Button> */}
     </Box>
   );
 };
