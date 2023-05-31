@@ -4,6 +4,7 @@ import { MarkerType, Place } from "../../types/markerTypes";
 import CustomMarker from "./CustomMarker";
 import { LatLng } from "leaflet";
 import axios from "axios";
+import { useToast } from "@chakra-ui/react";
 
 type Props = {
   markers: Place[];
@@ -24,6 +25,7 @@ export const Markers: React.FC<Props> = ({
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [tempPlace, setTempPlace] = useState<Place>(null);
   const map = useMap();
+  const toast = useToast();
   useMapEvent("click", (e) => {
     console.log("click", add, popupOpen);
 
@@ -71,9 +73,8 @@ export const Markers: React.FC<Props> = ({
   };
 
   const handlePopupClose = () => {
-    console.log("popup closed");
     setPopupOpen(false);
-    console.log("currentMarker", currentMarker);
+
     if (currentMarker !== null) {
       if (!currentMarker?.verified) {
         setTempPlace(currentMarker);
@@ -120,11 +121,27 @@ export const Markers: React.FC<Props> = ({
       `api/place/getallbyarea?nelat=${ne.lat}&nelng=${ne.lng}&swlat=${sw.lat}&swlng=${sw.lng}`
     );
     const data = await response.data;
-    console.log("here", currentMarker);
-    if (tempPlace !== null) {
-      data.push(currentMarker);
+
+    if (response.status === 200) {
+      if (tempPlace !== null) {
+        data.push(currentMarker);
+      }
+      setPlaces(data);
+      toast({
+        title: `Area search success!`,
+        status: "success",
+        variant: "subtle",
+        duration: 3000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: `Error fetching places in area!`,
+        status: "error",
+        variant: "subtle",
+        isClosable: true,
+      });
     }
-    setPlaces(data);
   };
 
   const handleMove = () => {

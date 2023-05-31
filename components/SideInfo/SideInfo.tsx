@@ -70,11 +70,6 @@ const SideInfo = ({
         opacity={isOpen ? 1 : 0}
       >
         <VStack overflow={"auto"} paddingY="20px" h="100%">
-          <Button
-            onClick={() => {
-              close();
-            }}
-          ></Button>
           {place?.verified ? (
             <Flex
               w={"100%"}
@@ -114,12 +109,7 @@ const SideInfo = ({
                   <TabPanel>
                     <Flex direction={"column"}>
                       <Text fontWeight={"medium"}>Description:</Text>
-                      <Text>
-                        {
-                          //place.description
-                          "This public restroom in a city park features a modern design with white tile walls, silver sinks, private stalls, and plenty of natural light. It offers a clean and convenient oasis for park-goers to freshen up."
-                        }
-                      </Text>
+                      <Text>{place.description}</Text>
                       <Divider my="10px" />
 
                       <AttributesShower attributes={attributes} />

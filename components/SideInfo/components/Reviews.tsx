@@ -11,6 +11,8 @@ import {
   Progress,
   VStack,
   Divider,
+  Spinner,
+  useToast,
 } from "@chakra-ui/react";
 import { Review, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
@@ -32,19 +34,26 @@ export const Reviews = ({ place }: { place: Place }) => {
   const [ratings, setRatings] = useState<ReviewCount[]>([]);
   const [highestRating, setHighestRating] = useState<ReviewCount>(null);
   const [avergageRating, setAverageRating] = useState<number>(place.rating); // average rating of place
-
   const [review, setReview] = useState<Review>(null); // review to be added
-
   const [content, setContent] = useState<string>(""); // content of review
   const [rating, setRating] = useState<number>(null); // rating of review
-
   const [addReview, setAddReview] = useState(false); // toggle add review form
+  const [loading, setLoading] = useState(false); // loading state for add review form
 
   const { data: session, status } = useSession();
+  const toast = useToast();
 
   const submitReview = async () => {
-    if (!session) console.log("Not logged in");
-    else {
+    if (!session) {
+      toast({
+        title: `Not Logged In!`,
+        status: "error",
+        variant: "subtle",
+
+        isClosable: true,
+      });
+    } else {
+      setLoading(true);
       const res = await fetch("/api/review/create", {
         method: "POST",
         body: JSON.stringify({
@@ -66,7 +75,24 @@ export const Reviews = ({ place }: { place: Place }) => {
         setAverageRating(data.averageRating);
 
         getRatings();
+
+        toast({
+          title: `Review added!`,
+          status: "success",
+          variant: "subtle",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: `Error Adding Review!`,
+          status: "error",
+          variant: "subtle",
+
+          isClosable: true,
+        });
       }
+      setLoading(false);
     }
   };
 
@@ -154,7 +180,17 @@ export const Reviews = ({ place }: { place: Place }) => {
               <Text>{reviews.length} reviews</Text>
               <Button
                 onClick={() => {
-                  setAddReview(true);
+                  if (!session) {
+                    toast({
+                      title: `Not Logged In!`,
+                      status: "error",
+                      variant: "subtle",
+                      duration: 3000,
+                      isClosable: true,
+                    });
+                  } else {
+                    setAddReview(true);
+                  }
                 }}
               >
                 Write Review
@@ -239,6 +275,7 @@ export const Reviews = ({ place }: { place: Place }) => {
 
           <HStack justify={"flex-end"}>
             <Button
+              isDisabled={loading}
               onClick={() => {
                 setAddReview(false);
               }}
@@ -246,12 +283,13 @@ export const Reviews = ({ place }: { place: Place }) => {
               Cancel
             </Button>
             <Button
-              isDisabled={!rating || !content}
+              isDisabled={!rating || !content || loading}
               onClick={() => {
                 submitReview();
               }}
             >
               Submit
+              {loading && <Spinner ml={2} size={"sm"} />}
             </Button>
           </HStack>
         </Stack>

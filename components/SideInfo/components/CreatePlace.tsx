@@ -8,6 +8,7 @@ import {
   Stack,
   Button,
   IconButton,
+  useToast,
 } from "@chakra-ui/react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Place } from "../../../types/markerTypes";
@@ -29,11 +30,25 @@ export const CreatePlace = ({
   const [attributes, setAttributes] = useState<string[]>();
 
   const { data: session, status } = useSession();
+  const toast = useToast();
 
   const addPlace = async () => {
-    if (!session) console.log("Not logged in");
-    else if (place.verified) console.log("Place already verified");
-    else {
+    if (!session) {
+      toast({
+        title: `Not Logged In!`,
+        status: "error",
+        variant: "subtle",
+        isClosable: true,
+      });
+    } else if (place.verified) {
+      toast({
+        title: `Place Not Verified!`,
+        status: "error",
+        variant: "subtle",
+
+        isClosable: true,
+      });
+    } else {
       console.log(place);
       const res = await fetch("/api/place/create", {
         method: "POST",
@@ -57,6 +72,21 @@ export const CreatePlace = ({
         setPlaces((prev) => [...prev, data]);
         setCurrentPlace(data);
         setPlaces((prev) => prev.filter((place) => place.id !== null));
+        toast({
+          title: `Place added!`,
+          status: "success",
+          variant: "subtle",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: `Error Adding Place!`,
+          status: "error",
+          variant: "subtle",
+
+          isClosable: true,
+        });
       }
     }
   };
