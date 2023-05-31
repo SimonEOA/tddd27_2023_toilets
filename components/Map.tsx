@@ -6,7 +6,7 @@ import { Markers } from "./Markers/Markes";
 import { Point } from "../types/markerTypes";
 import { Button, Box, Text, Center } from "@chakra-ui/react";
 import Header from "./Header";
-import SideInfo from "./SideInfo";
+import SideInfo from "./SideInfo/SideInfo";
 import { Place } from "../types/markerTypes";
 
 const Map = ({

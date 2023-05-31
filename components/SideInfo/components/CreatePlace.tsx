@@ -10,7 +10,7 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { Dispatch, SetStateAction, useState } from "react";
-import { Place } from "../../types/markerTypes";
+import { Place } from "../../../types/markerTypes";
 import { useSession } from "next-auth/react";
 
 export const CreatePlace = ({

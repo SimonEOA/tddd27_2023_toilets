@@ -17,7 +17,7 @@ import {
   TabPanel,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
-import useOpenClose from "../hooks/useOpenClose";
+import useOpenClose from "../../hooks/useOpenClose";
 import {
   DeleteIcon,
   MoonIcon,
@@ -25,9 +25,9 @@ import {
   StarIcon,
   SunIcon,
 } from "@chakra-ui/icons";
-import { Reviews } from "./SideInfoComponents/Reviews";
-import { CreatePlace } from "./SideInfoComponents/CreatePlace";
-import { Place } from "../types/markerTypes";
+import { Reviews } from "./components/Reviews";
+import { CreatePlace } from "./components/CreatePlace";
+import { Place } from "../../types/markerTypes";
 
 const SideInfo = ({
   place,
