@@ -78,11 +78,7 @@ export default function CustomMarker({
       ref={markerRef}
     >
       <Popup ref={popupref} closeButton={false} closeOnEscapeKey={false}>
-        {!place.verified ? (
-          <CustomPopupBox place={currentMarker} />
-        ) : (
-          <CustomPopupBox place={currentMarker} />
-        )}
+        <CustomPopupBox place={currentMarker} />
       </Popup>
     </Marker>
   );

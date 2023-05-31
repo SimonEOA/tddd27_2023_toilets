@@ -16,6 +16,7 @@ import { Review, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { Place } from "../../../types/markerTypes";
+import { get } from "http";
 
 interface ReviewCount {
   rating: number;
@@ -30,6 +31,7 @@ export const Reviews = ({ place }: { place: Place }) => {
   const [reviews, setReviews] = useState<ReviewWithUser[]>([]);
   const [ratings, setRatings] = useState<ReviewCount[]>([]);
   const [highestRating, setHighestRating] = useState<ReviewCount>(null);
+  const [avergageRating, setAverageRating] = useState<number>(place.rating); // average rating of place
 
   const [review, setReview] = useState<Review>(null); // review to be added
 
@@ -58,6 +60,13 @@ export const Reviews = ({ place }: { place: Place }) => {
 
       const data = await res.json();
       setAddReview(false);
+      if (res.status === 200) {
+        setReviews((prev) => [...prev, data.review]);
+        console.log(data);
+        setAverageRating(data.averageRating);
+
+        getRatings();
+      }
     }
   };
 
@@ -128,7 +137,7 @@ export const Reviews = ({ place }: { place: Place }) => {
 
             <VStack>
               <Text fontWeight={"bold"} fontSize={"5xl"}>
-                {place?.rating}
+                {avergageRating.toFixed(2)}
               </Text>
               <HStack>
                 {[...Array(5)].map((_, index) => {

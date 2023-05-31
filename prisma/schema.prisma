@@ -71,22 +71,25 @@ model Review {
   updatedAt DateTime @updatedAt @map("updated_at")
   userId    String
   placeId   String
+  images    String[]
   place     Place    @relation(fields: [placeId], references: [id])
   user      User     @relation(fields: [userId], references: [id])
 }
 
 model Place {
-  id         String   @id @default(cuid())
-  name       String
-  address    String
-  attributes String[]
-  rating     Int
-  longitude  Float
-  latitude   Float
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
-  ownerId    String
-  verified   Boolean
-  owner      User     @relation(fields: [ownerId], references: [id])
-  reviews    Review[]
+  id          String   @id @default(cuid())
+  name        String
+  address     String
+  attributes  String[]
+  rating      Float
+  description String
+  longitude   Float
+  latitude    Float
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  ownerId     String
+  verified    Boolean
+  images      String[]
+  owner       User     @relation(fields: [ownerId], references: [id])
+  reviews     Review[]
 }
