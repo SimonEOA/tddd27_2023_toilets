@@ -11,7 +11,10 @@ export default async function handler(req, res) {
     ownerId,
     description,
     verified,
+    images,
   } = req.body;
+
+  console.log(images);
 
   try {
     const place = await prisma.place.create({
@@ -29,6 +32,7 @@ export default async function handler(req, res) {
         owner: {
           connect: { id: ownerId },
         },
+        images,
       },
     });
 
