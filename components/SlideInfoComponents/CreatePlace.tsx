@@ -49,9 +49,10 @@ export const CreatePlace = ({
           "Content-Type": "application/json",
         },
       });
-      console.log(res);
-
       const data = await res.json();
+      if (res.status === 200) {
+        console.log("Place created");
+      }
     }
   };
 
