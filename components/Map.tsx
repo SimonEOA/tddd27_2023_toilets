@@ -9,7 +9,6 @@ import {
 
 import "leaflet/dist/leaflet.css";
 import "leaflet-geosearch/dist/geosearch.css";
-
 import { Markers } from "./Markers/Markes";
 import { Place, Point } from "../types/markerTypes";
 import { Button, Box, Text, Center } from "@chakra-ui/react";

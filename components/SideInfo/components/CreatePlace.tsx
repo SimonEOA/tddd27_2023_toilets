@@ -39,7 +39,7 @@ export const CreatePlace = ({
           name: session.user.name,
           address: place.address,
           attributes: attributes,
-          rating: 5,
+          rating: 0,
           longitude: place.longitude,
           latitude: place.latitude,
           ownerId: session.user.id,
