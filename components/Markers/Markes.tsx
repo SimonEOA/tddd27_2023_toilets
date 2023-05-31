@@ -73,6 +73,7 @@ export const Markers: React.FC<Props> = ({
   const handlePopupClose = () => {
     console.log("popup closed");
     setPopupOpen(false);
+    console.log("currentMarker", currentMarker);
     if (currentMarker !== null) {
       if (!currentMarker?.verified) {
         setTempPlace(currentMarker);
@@ -83,6 +84,7 @@ export const Markers: React.FC<Props> = ({
         setCurrentMarker(null);
       }
     } else {
+      console.log("here");
       setCurrentMarker(null);
     }
   };

@@ -33,9 +33,11 @@ import AttributesShower from "./components/AttributesShower";
 const SideInfo = ({
   place,
   setCurrentPlace,
+  setPlaces,
 }: {
   place: Place;
   setCurrentPlace: React.Dispatch<React.SetStateAction<Place>>;
+  setPlaces: React.Dispatch<React.SetStateAction<Place[]>>;
 }) => {
   const { isOpen, toggle, close, open } = useOpenClose();
   const [attributes, setAttributes] = useState<string[]>([]);
@@ -133,6 +135,7 @@ const SideInfo = ({
             <CreatePlace
               place={place}
               setCurrentPlace={setCurrentPlace}
+              setPlaces={setPlaces}
             ></CreatePlace>
           )}
         </VStack>

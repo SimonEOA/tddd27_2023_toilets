@@ -62,7 +62,11 @@ const Map = ({ width, height }: { width: string; height: string }) => {
   };
   return (
     <Box pos={"relative"}>
-      <SideInfo place={marker} setCurrentPlace={setMarker}></SideInfo>
+      <SideInfo
+        place={marker}
+        setCurrentPlace={setMarker}
+        setPlaces={setMarkers}
+      ></SideInfo>
       <ActionButton
         addMarker={addMarker}
         setAddMarker={setAddMarker}

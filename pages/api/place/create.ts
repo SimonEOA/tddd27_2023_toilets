@@ -9,6 +9,7 @@ export default async function handler(req, res) {
     longitude,
     latitude,
     ownerId,
+    description,
     verified,
   } = req.body;
 
@@ -23,6 +24,7 @@ export default async function handler(req, res) {
         rating,
         longitude,
         latitude,
+        description,
         verified,
         owner: {
           connect: { id: ownerId },

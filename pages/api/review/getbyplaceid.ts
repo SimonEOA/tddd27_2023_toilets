@@ -1,6 +1,6 @@
 import prisma from "../../../lib/prisma";
 
-export default async function handler(req, res) {
+export default async function getPlaceById(req, res) {
   try {
     const reviews = await prisma.review.findMany({
       where: {

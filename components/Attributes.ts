@@ -11,5 +11,4 @@ export const ATTRIBUTE_IMAGES: AttributeImages = {
     "wheelchair": "/wheelchair.png",
     "shower": "/shower.png",
     "sink": "/sink.png",
-    "test": "/sink.png",
   };

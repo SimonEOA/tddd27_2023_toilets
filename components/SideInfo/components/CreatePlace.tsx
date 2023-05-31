@@ -17,9 +17,11 @@ import Attributes from "./AttributesSelector";
 export const CreatePlace = ({
   place,
   setCurrentPlace,
+  setPlaces,
 }: {
   place: Place;
   setCurrentPlace: Dispatch<SetStateAction<Place>>;
+  setPlaces: Dispatch<SetStateAction<Place[]>>;
 }) => {
   const [name, setName] = useState<string>(place?.name);
   const [address, setAddress] = useState<string>(place?.address);
@@ -43,6 +45,7 @@ export const CreatePlace = ({
           longitude: place.longitude,
           latitude: place.latitude,
           ownerId: session.user.id,
+          description: place.description,
           verified: true,
         }),
         headers: {
@@ -51,7 +54,9 @@ export const CreatePlace = ({
       });
       const data = await res.json();
       if (res.status === 200) {
-        console.log("Place created");
+        setPlaces((prev) => [...prev, data]);
+        setCurrentPlace(data);
+        setPlaces((prev) => prev.filter((place) => place.id !== null));
       }
     }
   };
