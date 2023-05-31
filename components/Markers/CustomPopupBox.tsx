@@ -1,6 +1,6 @@
 import { Flex, Box, Button, Input, Text } from "@chakra-ui/react";
 import { Place } from "../../types/markerTypes";
-import AttributesShower from "../SlideInfoComponents/AttributesShower";
+import AttributesShower from "../SideInfo/components/AttributesShower";
 
 interface CustomMarkerProps {
   place: Place;

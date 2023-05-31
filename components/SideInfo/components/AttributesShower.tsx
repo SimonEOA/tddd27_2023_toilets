@@ -8,7 +8,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { ATTRIBUTE_IMAGES } from "../Attributes";
+import { ATTRIBUTE_IMAGES } from "../../Attributes";
 import Image from "next/image";
 import { useState } from "react";
 

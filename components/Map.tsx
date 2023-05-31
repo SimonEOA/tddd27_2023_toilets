@@ -19,7 +19,7 @@ import { OpenStreetMapProvider } from "leaflet-geosearch";
 import * as GeoSearch from "leaflet-geosearch";
 import { GeoSearchControl, MapBoxProvider } from "leaflet-geosearch";
 import { useMap } from "react-leaflet";
-import SideInfo from "./SlideInfo/SideInfo";
+import SideInfo from "./SideInfo/SideInfo";
 import { ActionButton } from "./ActionButton/ActionButton";
 import { MapType, StandardMap } from "../types/mapTypes";
 import MapSelector from "./MapSelector/MapSelector";

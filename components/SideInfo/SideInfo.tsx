@@ -25,10 +25,10 @@ import {
   StarIcon,
   SunIcon,
 } from "@chakra-ui/icons";
-import { Reviews } from "../SlideInfoComponents/Reviews";
-import { CreatePlace } from "../SlideInfoComponents/CreatePlace";
+import { Reviews } from "./components/Reviews";
+import { CreatePlace } from "./components/CreatePlace";
 import { Place } from "../../types/markerTypes";
-import AttributesShower from "../SlideInfoComponents/AttributesShower";
+import AttributesShower from "./components/AttributesShower";
 
 const SideInfo = ({
   place,

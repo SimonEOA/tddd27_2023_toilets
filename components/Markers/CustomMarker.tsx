@@ -9,7 +9,7 @@ import { on } from "events";
 import { useRouter } from "next/router";
 import { marker } from "leaflet";
 import { ATTRIBUTE_IMAGES } from "../Attributes";
-import AttributesShower from "../SlideInfoComponents/AttributesShower";
+import AttributesShower from "../SideInfo/components/AttributesShower";
 import CustomPopupBox from "./CustomPopupBox";
 
 const ToiletIcon = new Icon({

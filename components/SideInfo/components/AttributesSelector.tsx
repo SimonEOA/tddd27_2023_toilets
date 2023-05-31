@@ -8,11 +8,11 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { ATTRIBUTE_IMAGES } from "../Attributes";
+import { ATTRIBUTE_IMAGES } from "../../Attributes";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import useOpenClose from "../../hooks/useOpenClose";
-import { Place } from "../../types/markerTypes";
+import useOpenClose from "../../../hooks/useOpenClose";
+import { Place } from "../../../types/markerTypes";
 
 interface AttributesProps {
   updateAttributes: (attributes: string[]) => void;
