@@ -9,9 +9,10 @@ import {
   Button,
   IconButton,
 } from "@chakra-ui/react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Place } from "../../../types/markerTypes";
 import { useSession } from "next-auth/react";
+import Attributes from "./AttributesSelector";
 
 export const CreatePlace = ({
   place,
@@ -23,6 +24,7 @@ export const CreatePlace = ({
   const [name, setName] = useState<string>(place?.name);
   const [address, setAddress] = useState<string>(place?.address);
   const [description, setDescription] = useState<string>(place?.description);
+  const [attributes, setAttributes] = useState<string[]>();
 
   const { data: session, status } = useSession();
 
@@ -36,8 +38,8 @@ export const CreatePlace = ({
         body: JSON.stringify({
           name: session.user.name,
           address: place.address,
-          attributes: place.attributes,
-          rating: 5,
+          attributes: attributes,
+          rating: 0,
           longitude: place.longitude,
           latitude: place.latitude,
           ownerId: session.user.id,
@@ -47,21 +49,24 @@ export const CreatePlace = ({
           "Content-Type": "application/json",
         },
       });
-      console.log(res);
-
       const data = await res.json();
-      const newPLace: Place = {
-        id: data.id,
-        name: data.name,
-        address: data.address,
-        longitude: data.longitude,
-        latitude: data.latitude,
-        verified: true,
-        rating: data.rating,
-      };
-      //handlePlaces(newPLace);
+      if (res.status === 200) {
+        console.log("Place created");
+      }
     }
   };
+
+  const updateAttributes = (attributes: string[]) => {
+    setAttributes(attributes);
+    setCurrentPlace((prev) => ({
+      ...prev,
+      attributes: attributes,
+    }));
+  };
+
+  useEffect(() => {
+    console.log("new place", place);
+  }, [place]);
 
   return (
     <Flex w={"100%"} align={"center"} justify={"center"} direction={"column"}>
@@ -72,6 +77,7 @@ export const CreatePlace = ({
         <Input
           placeholder="Write name..."
           size="sm"
+          value={place ? place?.address : ""}
           onChange={(e) => {
             setCurrentPlace((prev) => ({
               ...prev,
@@ -85,6 +91,7 @@ export const CreatePlace = ({
         <Textarea
           placeholder="Write description..."
           size="sm"
+          value={place ? place.description : ""}
           onChange={(e) => {
             setCurrentPlace((prev) => ({
               ...prev,
@@ -95,12 +102,7 @@ export const CreatePlace = ({
       </Stack>
       <Stack justify={"space-between"} w="90%" mt="10px">
         <Text fontSize="md">Attributes</Text>
-        <Flex>
-          <IconButton icon={<PhoneIcon />} aria-label="Add tag" />
-          <IconButton icon={<MoonIcon />} aria-label="Add tag" />
-          <IconButton icon={<DeleteIcon />} aria-label="Add tag" />
-          <IconButton icon={<SunIcon />} aria-label="Add tag" />
-        </Flex>
+        <Attributes place={place} updateAttributes={updateAttributes} />
       </Stack>
       <Button mt="10px" onClick={addPlace}>
         Save

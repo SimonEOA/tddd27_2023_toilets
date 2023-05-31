@@ -28,6 +28,7 @@ import {
 import { Reviews } from "./components/Reviews";
 import { CreatePlace } from "./components/CreatePlace";
 import { Place } from "../../types/markerTypes";
+import AttributesShower from "./components/AttributesShower";
 
 const SideInfo = ({
   place,
@@ -37,15 +38,20 @@ const SideInfo = ({
   setCurrentPlace: React.Dispatch<React.SetStateAction<Place>>;
 }) => {
   const { isOpen, toggle, close, open } = useOpenClose();
+  const [attributes, setAttributes] = useState<string[]>([]);
 
   useEffect(() => {
     if (!place) {
       close();
     } else {
       open();
+      setAttributes(place.attributes);
     }
   }, [place]);
 
+  useEffect(() => {
+    console.log("open", isOpen);
+  }, [isOpen]);
   return (
     <HStack justify={"center"}>
       <Box
@@ -62,6 +68,11 @@ const SideInfo = ({
         opacity={isOpen ? 1 : 0}
       >
         <VStack overflow={"auto"} paddingY="20px" h="100%">
+          <Button
+            onClick={() => {
+              close();
+            }}
+          ></Button>
           {place?.verified ? (
             <Flex
               w={"100%"}
@@ -108,25 +119,8 @@ const SideInfo = ({
                         }
                       </Text>
                       <Divider my="10px" />
-                      {place?.attributes?.map((attr) => {})}
-                      <VStack>
-                        <HStack w="100%">
-                          <PhoneIcon />
-                          <Text>Phone</Text>
-                        </HStack>
-                        <HStack w="100%">
-                          <MoonIcon />
-                          <Text>Night Open</Text>
-                        </HStack>
-                        <HStack w="100%">
-                          <DeleteIcon />
-                          <Text>Trash</Text>
-                        </HStack>
-                        <HStack w="100%">
-                          <SunIcon />
-                          <Text>Day Open</Text>
-                        </HStack>
-                      </VStack>
+
+                      <AttributesShower attributes={attributes} />
                     </Flex>
                   </TabPanel>
                   <TabPanel>

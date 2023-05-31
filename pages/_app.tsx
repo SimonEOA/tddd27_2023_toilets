@@ -1,7 +1,5 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { AppProps } from "next/app";
-import { extendTheme } from "@chakra-ui/react";
-import Header from "../components/Header";
 import { SessionProvider } from "next-auth/react";
 import { theme } from "../themes/theme";
 

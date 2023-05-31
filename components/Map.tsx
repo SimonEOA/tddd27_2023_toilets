@@ -1,48 +1,80 @@
-import { useRef, useState } from "react";
-import { MapContainer, TileLayer, ZoomControl } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import { useEffect, useRef, useState } from "react";
+import {
+  MapContainer,
+  TileLayer,
+  ZoomControl,
+  useMapEvent,
+  useMapEvents,
+} from "react-leaflet";
 
+import "leaflet/dist/leaflet.css";
+import "leaflet-geosearch/dist/geosearch.css";
 import { Markers } from "./Markers/Markes";
-import { Point } from "../types/markerTypes";
+import { Place, Point } from "../types/markerTypes";
 import { Button, Box, Text, Center } from "@chakra-ui/react";
 import Header from "./Header";
+import axios from "axios";
+import { OpenStreetMapProvider } from "leaflet-geosearch";
+import * as GeoSearch from "leaflet-geosearch";
+import { GeoSearchControl, MapBoxProvider } from "leaflet-geosearch";
+import { useMap } from "react-leaflet";
 import SideInfo from "./SideInfo/SideInfo";
-import { Place } from "../types/markerTypes";
+import { ActionButton } from "./ActionButton/ActionButton";
+import { MapType, StandardMap } from "../types/mapTypes";
+import MapSelector from "./MapSelector/MapSelector";
 
-const Map = ({
-  width,
-  height,
-  markers,
-}: {
-  width: string;
-  height: string;
-  markers: Place[];
-}) => {
-  const [geoData, setGeoData] = useState<Point>({
-    lat: markers[markers.length - 1].latitude,
-    lng: markers[markers.length - 1].longitude,
+const SearchField = () => {
+  const provider = new OpenStreetMapProvider();
+
+  const searchControl = GeoSearchControl({
+    provider: provider,
+    ZoomControl: true,
+    autoClose: true,
+    retainZoomLevel: false,
+    animateZoom: true,
+    keepResult: false,
+    searchLabel: "search",
+    keepOpen: false,
+    style: "bar",
   });
+
+  const map = useMap();
+  useEffect(() => {
+    map.addControl(searchControl);
+    return () => {
+      map.removeControl(searchControl);
+    };
+  }, []);
+
+  return null;
+};
+
+const Map = ({ width, height }: { width: string; height: string }) => {
+  const [geoData, setGeoData] = useState<Point>({ lat: 63, lng: 16 });
   const [addMarker, setAddMarker] = useState(false);
   const [marker, setMarker] = useState<Place>(null);
-  const [popupOpen, setPopupOpen] = useState(false);
-  const [position, setPosition] = useState<number[]>([]);
+  const [markers, setMarkers] = useState<Place[]>([]);
+  const [mapStyle, setMapStyle] = useState<MapType>(StandardMap);
 
-  const currentMarker = (marker: Place) => {
-    setMarker(marker);
+  const handleSetMapStyle = (map: MapType) => {
+    setMapStyle(map);
+    console.log(map);
   };
-  const mapRef = useRef(null); // Create a ref for the map instance
-
-  const handleFlyTo = (position: number[]) => {
-    if (mapRef.current == null) return;
-    const newPosition = [position[0], position[1]]; // The coordinates of Berlin
-    const zoomLevel = 13; // The zoom level for the map
-    mapRef.current.flyTo(newPosition, zoomLevel);
-  };
-
   return (
     <Box pos={"relative"}>
-      <Header markers={markers} handleFly={handleFlyTo} />
       <SideInfo place={marker} setCurrentPlace={setMarker}></SideInfo>
+      <ActionButton
+        addMarker={addMarker}
+        setAddMarker={setAddMarker}
+        setMarkers={setMarkers}
+        markers={markers}
+        setMarker={setMarker}
+      />{" "}
+      <MapSelector handleSetMapStyle={handleSetMapStyle} />
+      <Text pos={"absolute"} top={0} right={0} bg={"Red"} zIndex={9999}>
+        {addMarker ? "Edit mode +" : ""}
+        {marker ? "Editing marker " : ""}
+      </Text>
       <MapContainer
         center={[geoData.lat, geoData.lng]}
         zoom={13}
@@ -54,31 +86,20 @@ const Map = ({
           </p>
         }
         zoomControl={false}
-        ref={mapRef}
       >
-        <TileLayer
-          attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-          url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-        />
+        {!marker && <SearchField />}
+        <TileLayer attribution={mapStyle.attributes} url={mapStyle.url} />
 
         <Markers
           add={addMarker}
           setCurrentMarker={setMarker}
           currentMarker={marker}
           markers={markers}
+          setPlaces={setMarkers}
         />
 
         <ZoomControl position="bottomright" />
       </MapContainer>
-      <Button
-        w={"100%"}
-        mt="5px"
-        onClick={() => {
-          setAddMarker((cur) => !cur);
-        }}
-      >
-        {!addMarker ? "Add markers" : "Stop adding markers"}
-      </Button>
     </Box>
   );
 };
