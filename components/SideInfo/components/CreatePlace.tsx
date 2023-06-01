@@ -1,4 +1,12 @@
-import { Button, Flex, Input, Stack, Text, Textarea } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  Input,
+  Stack,
+  Text,
+  Textarea,
+  useToast,
+} from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Place } from "../../../types/markerTypes";
@@ -56,16 +64,29 @@ export const CreatePlace = ({
   };
 
   const { data: session, status } = useSession();
+  const toast = useToast();
 
   const addPlace = async () => {
-    if (!session) console.log("Not logged in");
-    else if (place.verified) console.log("Place already verified");
-    else {
+    if (!session) {
+      toast({
+        title: `Not Logged In!`,
+        status: "error",
+        variant: "subtle",
+        isClosable: true,
+      });
+    } else if (place.verified) {
+      toast({
+        title: `Place Not Verified!`,
+        status: "error",
+        variant: "subtle",
+
+        isClosable: true,
+      });
+    } else {
       console.log(place);
 
       try {
         await handleUpload(); // Wait for image uploads to finish
-        console.log(imageNames);
 
         const res = await fetch("/api/place/create", {
           method: "POST",
@@ -91,6 +112,21 @@ export const CreatePlace = ({
           setPlaces((prev) => [...prev, data]);
           setCurrentPlace(data);
           setPlaces((prev) => prev.filter((place) => place.id !== null));
+          toast({
+            title: `Place added!`,
+            status: "success",
+            variant: "subtle",
+            duration: 3000,
+            isClosable: true,
+          });
+        } else {
+          toast({
+            title: `Error Adding Place!`,
+            status: "error",
+            variant: "subtle",
+
+            isClosable: true,
+          });
         }
       } catch (error) {
         console.error("Error creating place:", error);

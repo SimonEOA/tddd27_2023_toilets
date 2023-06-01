@@ -11,6 +11,8 @@ import {
   Progress,
   VStack,
   Divider,
+  Spinner,
+  useToast,
 } from "@chakra-ui/react";
 import { Review, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
@@ -39,12 +41,67 @@ export const Reviews = ({
   const [ratings, setRatings] = useState<ReviewCount[]>([]);
   const [highestRating, setHighestRating] = useState<ReviewCount>(null);
   const [avergageRating, setAverageRating] = useState<number>(place.rating); // average rating of place
-
   const [review, setReview] = useState<Review>(null); // review to be added
-
+  const [content, setContent] = useState<string>(""); // content of review
+  const [rating, setRating] = useState<number>(null); // rating of review
   const [addReview, setAddReview] = useState(false); // toggle add review form
+  const [loading, setLoading] = useState(false); // loading state for add review form
 
   const { data: session, status } = useSession();
+  const toast = useToast();
+
+  const submitReview = async () => {
+    if (!session) {
+      toast({
+        title: `Not Logged In!`,
+        status: "error",
+        variant: "subtle",
+
+        isClosable: true,
+      });
+    } else {
+      setLoading(true);
+      const res = await fetch("/api/review/create", {
+        method: "POST",
+        body: JSON.stringify({
+          content: content,
+          rating: rating,
+          placeId: place.id,
+          userId: session.user.id,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await res.json();
+      setAddReview(false);
+      if (res.status === 200) {
+        setReviews((prev) => [...prev, data.review]);
+        console.log(data);
+        setAverageRating(data.averageRating);
+
+        getRatings();
+
+        toast({
+          title: `Review added!`,
+          status: "success",
+          variant: "subtle",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: `Error Adding Review!`,
+          status: "error",
+          variant: "subtle",
+
+          isClosable: true,
+        });
+      }
+      setLoading(false);
+    }
+  };
 
   const getReviews = async () => {
     const res = await fetch(`/api/review/getbyplaceid?place=${place.id}`, {
@@ -131,7 +188,17 @@ export const Reviews = ({
               <Text>{reviews.length} reviews</Text>
               <Button
                 onClick={() => {
-                  setAddReview(true);
+                  if (!session) {
+                    toast({
+                      title: `Not Logged In!`,
+                      status: "error",
+                      variant: "subtle",
+                      duration: 3000,
+                      isClosable: true,
+                    });
+                  } else {
+                    setAddReview(true);
+                  }
                 }}
               >
                 Write Review
