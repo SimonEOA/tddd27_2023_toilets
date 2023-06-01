@@ -17,17 +17,24 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { Place } from "../../../types/markerTypes";
 import { get } from "http";
+import WriteReview from "./WriteReview";
 
 interface ReviewCount {
   rating: number;
   count: number;
 }
 
-interface ReviewWithUser extends Review {
+export interface ReviewWithUser extends Review {
   user?: User;
 }
 
-export const Reviews = ({ place }: { place: Place }) => {
+export const Reviews = ({
+  place,
+  setCurrentPlace,
+}: {
+  place: Place;
+  setCurrentPlace: React.Dispatch<React.SetStateAction<Place>>;
+}) => {
   const [reviews, setReviews] = useState<ReviewWithUser[]>([]);
   const [ratings, setRatings] = useState<ReviewCount[]>([]);
   const [highestRating, setHighestRating] = useState<ReviewCount>(null);
@@ -35,40 +42,9 @@ export const Reviews = ({ place }: { place: Place }) => {
 
   const [review, setReview] = useState<Review>(null); // review to be added
 
-  const [content, setContent] = useState<string>(""); // content of review
-  const [rating, setRating] = useState<number>(null); // rating of review
-
   const [addReview, setAddReview] = useState(false); // toggle add review form
 
   const { data: session, status } = useSession();
-
-  const submitReview = async () => {
-    if (!session) console.log("Not logged in");
-    else {
-      const res = await fetch("/api/review/create", {
-        method: "POST",
-        body: JSON.stringify({
-          content: content,
-          rating: rating,
-          placeId: place.id,
-          userId: session.user.id,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await res.json();
-      setAddReview(false);
-      if (res.status === 200) {
-        setReviews((prev) => [...prev, data.review]);
-        console.log(data);
-        setAverageRating(data.averageRating);
-
-        getRatings();
-      }
-    }
-  };
 
   const getReviews = async () => {
     const res = await fetch(`/api/review/getbyplaceid?place=${place.id}`, {
@@ -90,6 +66,7 @@ export const Reviews = ({ place }: { place: Place }) => {
 
   useEffect(() => {
     if (place) {
+      setAverageRating(place.rating);
       getRatings();
       getReviews();
     }
@@ -198,63 +175,15 @@ export const Reviews = ({ place }: { place: Place }) => {
           })}
         </Stack>
       ) : (
-        <Stack>
-          <HStack justify={"space-between"}>
-            <HStack>
-              <Image
-                src={session.user.image}
-                boxSize={"35px"}
-                borderRadius={"full"}
-              />
-              <Text>{session.user.name}</Text>
-            </HStack>
-            <HStack>
-              <Text>Rating: </Text>
-              {[...Array(5)].map((_, index) => {
-                index += 1;
-                return (
-                  <StarIcon
-                    color={index <= rating ? "#ffc40c" : "#BEBEBE"}
-                    boxSize="13px"
-                    key={index}
-                    onClick={() => {
-                      setRating(index);
-                    }}
-                    cursor={"pointer"}
-                  />
-                );
-              })}
-            </HStack>
-          </HStack>
-
-          <Textarea
-            placeholder="Write your review here..."
-            my={2}
-            onChange={(e) => {
-              setContent(e.target.value);
-            }}
-          ></Textarea>
-
-          <Button>Add a photo</Button>
-
-          <HStack justify={"flex-end"}>
-            <Button
-              onClick={() => {
-                setAddReview(false);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              isDisabled={!rating || !content}
-              onClick={() => {
-                submitReview();
-              }}
-            >
-              Submit
-            </Button>
-          </HStack>
-        </Stack>
+        <WriteReview
+          place={place}
+          setAddReview={setAddReview}
+          setReviews={setReviews}
+          setAverageRating={setAverageRating}
+          addReview={addReview}
+          getRatings={getRatings}
+          setCurrentPlace={setCurrentPlace}
+        />
       )}
     </Box>
   );
