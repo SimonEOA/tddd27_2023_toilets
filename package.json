@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "postinstall": "prisma generate"
+ 
   },
   "eslintConfig": {
     "extends": "next/core-web-vitals"
