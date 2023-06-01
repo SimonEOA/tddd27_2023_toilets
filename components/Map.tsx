@@ -1,27 +1,18 @@
-import { useEffect, useRef, useState } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  ZoomControl,
-  useMapEvent,
-  useMapEvents,
-} from "react-leaflet";
+import { useEffect, useState } from "react";
+import { MapContainer, TileLayer, ZoomControl } from "react-leaflet";
 
-import "leaflet/dist/leaflet.css";
+import { Box, Spinner } from "@chakra-ui/react";
 import "leaflet-geosearch/dist/geosearch.css";
-import { Markers } from "./Markers/Markes";
+import "leaflet/dist/leaflet.css";
 import { Place, Point } from "../types/markerTypes";
-import { Button, Box, Text, Center, Spinner } from "@chakra-ui/react";
-import Header from "./Header";
-import axios from "axios";
-import { OpenStreetMapProvider } from "leaflet-geosearch";
-import * as GeoSearch from "leaflet-geosearch";
-import { GeoSearchControl, MapBoxProvider } from "leaflet-geosearch";
+import { Markers } from "./Markers/Markes";
+
+import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
 import { useMap } from "react-leaflet";
-import SideInfo from "./SideInfo/SideInfo";
-import { ActionButton } from "./ActionButton/ActionButton";
 import { MapType, StandardMap } from "../types/mapTypes";
+import { ActionButton } from "./ActionButton/ActionButton";
 import MapSelector from "./MapSelector/MapSelector";
+import SideInfo from "./SideInfo/SideInfo";
 
 const SearchField = () => {
   const provider = new OpenStreetMapProvider();

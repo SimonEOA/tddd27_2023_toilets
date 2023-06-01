@@ -18,12 +18,15 @@ export default NextAuth({
   session: {
     strategy: "jwt",
   },
+  jwt: {
+    secret: process.env.JWT_SECRET,
+  },
 
   callbacks: {
     async session({ session, token, user }) {
       session.user.jti = token.jti as string;
       session.user.id = token.sub as string;
-      
+
       return session; // The return type will match the one returned in `useSession()`
     },
   },

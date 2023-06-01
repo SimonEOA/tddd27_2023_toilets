@@ -19,17 +19,24 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { Place } from "../../../types/markerTypes";
 import { get } from "http";
+import WriteReview from "./WriteReview";
 
 interface ReviewCount {
   rating: number;
   count: number;
 }
 
-interface ReviewWithUser extends Review {
+export interface ReviewWithUser extends Review {
   user?: User;
 }
 
-export const Reviews = ({ place }: { place: Place }) => {
+export const Reviews = ({
+  place,
+  setCurrentPlace,
+}: {
+  place: Place;
+  setCurrentPlace: React.Dispatch<React.SetStateAction<Place>>;
+}) => {
   const [reviews, setReviews] = useState<ReviewWithUser[]>([]);
   const [ratings, setRatings] = useState<ReviewCount[]>([]);
   const [highestRating, setHighestRating] = useState<ReviewCount>(null);
@@ -116,6 +123,7 @@ export const Reviews = ({ place }: { place: Place }) => {
 
   useEffect(() => {
     if (place) {
+      setAverageRating(place.rating);
       getRatings();
       getReviews();
     }
@@ -234,65 +242,15 @@ export const Reviews = ({ place }: { place: Place }) => {
           })}
         </Stack>
       ) : (
-        <Stack>
-          <HStack justify={"space-between"}>
-            <HStack>
-              <Image
-                src={session.user.image}
-                boxSize={"35px"}
-                borderRadius={"full"}
-              />
-              <Text>{session.user.name}</Text>
-            </HStack>
-            <HStack>
-              <Text>Rating: </Text>
-              {[...Array(5)].map((_, index) => {
-                index += 1;
-                return (
-                  <StarIcon
-                    color={index <= rating ? "#ffc40c" : "#BEBEBE"}
-                    boxSize="13px"
-                    key={index}
-                    onClick={() => {
-                      setRating(index);
-                    }}
-                    cursor={"pointer"}
-                  />
-                );
-              })}
-            </HStack>
-          </HStack>
-
-          <Textarea
-            placeholder="Write your review here..."
-            my={2}
-            onChange={(e) => {
-              setContent(e.target.value);
-            }}
-          ></Textarea>
-
-          <Button>Add a photo</Button>
-
-          <HStack justify={"flex-end"}>
-            <Button
-              isDisabled={loading}
-              onClick={() => {
-                setAddReview(false);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              isDisabled={!rating || !content || loading}
-              onClick={() => {
-                submitReview();
-              }}
-            >
-              Submit
-              {loading && <Spinner ml={2} size={"sm"} />}
-            </Button>
-          </HStack>
-        </Stack>
+        <WriteReview
+          place={place}
+          setAddReview={setAddReview}
+          setReviews={setReviews}
+          setAverageRating={setAverageRating}
+          addReview={addReview}
+          getRatings={getRatings}
+          setCurrentPlace={setCurrentPlace}
+        />
       )}
     </Box>
   );
