@@ -44,6 +44,7 @@ export const Markers: React.FC<Props> = ({
           verified: false,
           attributes: [],
           rating: 0,
+          images: [],
         };
 
         setPlaces((prevMarkers) => [...prevMarkers, tempPlace]);
