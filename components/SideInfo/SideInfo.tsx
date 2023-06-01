@@ -71,11 +71,6 @@ const SideInfo = ({
         opacity={isOpen ? 1 : 0}
       >
         <VStack overflow={"auto"} paddingY="20px" h="100%">
-          <Button
-            onClick={() => {
-              close();
-            }}
-          ></Button>
           {place?.verified ? (
             <ShowPlace
               place={place}

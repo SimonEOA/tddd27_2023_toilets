@@ -9,6 +9,7 @@ export type MarkerType = {
 };
 
 export type Place = {
+  images: string[];
   id: string;
   name: string;
   address: string;

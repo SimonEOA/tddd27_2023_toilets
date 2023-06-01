@@ -13,11 +13,13 @@ import {
   Box,
   Image,
   Text,
+  Show,
 } from "@chakra-ui/react";
 import AttributesShower from "./AttributesShower";
 import { Reviews } from "./Reviews";
 import { Place } from "../../../types/markerTypes";
 import { useState } from "react";
+import ShowImage from "../../ShowImage";
 
 const ShowPlace = ({
   place,
@@ -32,12 +34,12 @@ const ShowPlace = ({
 }) => {
   return (
     <Flex w={"100%"} align={"center"} justify={"center"} direction={"column"}>
-      <Image fallbackSrc="/001-public-toilet.png" maxW={"100%"} h="250px" />
+      <ShowImage images={place.images} />
       <HStack justify={"space-between"} w="90%">
-        <Text fontSize={"2xl"} fontWeight={"bold"}>
+        <Text fontSize={"xl"} fontWeight={"bold"}>
           {place?.address}
         </Text>
-        <HStack>
+        <Flex gap="1" align={"center"}>
           <Text fontSize={"sm"}>rating:</Text>
           {[...Array(5)].map((_, index) => {
             index += 1;
@@ -49,7 +51,8 @@ const ShowPlace = ({
               />
             );
           })}
-        </HStack>
+          <Text fontSize={"sm"}>{"(" + place.rating.toFixed(1) + ")"}</Text>
+        </Flex>
       </HStack>
       <Tabs isFitted w="100%">
         <TabList>
@@ -60,12 +63,7 @@ const ShowPlace = ({
           <TabPanel>
             <Flex direction={"column"}>
               <Text fontWeight={"medium"}>Description:</Text>
-              <Text>
-                {
-                  //place.description
-                  "This public restroom in a city park features a modern design with white tile walls, silver sinks, private stalls, and plenty of natural light. It offers a clean and convenient oasis for park-goers to freshen up."
-                }
-              </Text>
+              <Text fontSize={"15px"}>{place.description}</Text>
               <Divider my="10px" />
 
               <AttributesShower attributes={attributes} />
