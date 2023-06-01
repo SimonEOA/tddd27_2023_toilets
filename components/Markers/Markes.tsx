@@ -12,6 +12,7 @@ type Props = {
   setCurrentMarker: (marker: Place) => void;
   currentMarker: Place;
   setPlaces: Dispatch<SetStateAction<Place[]>>;
+  setLoading: Dispatch<SetStateAction<boolean>>;
 };
 export const Markers: React.FC<Props> = ({
   add,
@@ -19,11 +20,13 @@ export const Markers: React.FC<Props> = ({
   markers,
   setPlaces,
   currentMarker,
+  setLoading,
 }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [isPanning, setIsPanning] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [tempPlace, setTempPlace] = useState<Place>(null);
+
   const map = useMap();
   const toast = useToast();
   useMapEvent("click", (e) => {
@@ -114,6 +117,9 @@ export const Markers: React.FC<Props> = ({
       fetchData(ne, sw);
       setIsPanning(false);
     }
+    if (timeRemaining === 1) {
+      setLoading(true);
+    }
   }, [timeRemaining]);
 
   const fetchData = async (ne: LatLng, sw: LatLng) => {
@@ -142,10 +148,12 @@ export const Markers: React.FC<Props> = ({
         isClosable: true,
       });
     }
+    setLoading(false);
   };
 
   const handleMove = () => {
     setIsPanning(true);
+    setLoading(false);
     setTimeRemaining(2);
   };
 

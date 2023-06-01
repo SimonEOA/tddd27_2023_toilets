@@ -11,7 +11,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-geosearch/dist/geosearch.css";
 import { Markers } from "./Markers/Markes";
 import { Place, Point } from "../types/markerTypes";
-import { Button, Box, Text, Center } from "@chakra-ui/react";
+import { Button, Box, Text, Center, Spinner } from "@chakra-ui/react";
 import Header from "./Header";
 import axios from "axios";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
@@ -55,6 +55,7 @@ const Map = ({ width, height }: { width: string; height: string }) => {
   const [marker, setMarker] = useState<Place>(null);
   const [markers, setMarkers] = useState<Place[]>([]);
   const [mapStyle, setMapStyle] = useState<MapType>(StandardMap);
+  const [loading, setLoading] = useState(false);
 
   const handleSetMapStyle = (map: MapType) => {
     setMapStyle(map);
@@ -75,10 +76,9 @@ const Map = ({ width, height }: { width: string; height: string }) => {
         setMarker={setMarker}
       />{" "}
       <MapSelector handleSetMapStyle={handleSetMapStyle} />
-      <Text pos={"absolute"} top={0} right={0} bg={"Red"} zIndex={9999}>
-        {addMarker ? "Edit mode +" : ""}
-        {marker ? "Editing marker " : ""}
-      </Text>
+      {loading && (
+        <Spinner position={"absolute"} bottom={"100"} right={2} zIndex={9999} />
+      )}
       <MapContainer
         center={[geoData.lat, geoData.lng]}
         zoom={13}
@@ -100,6 +100,7 @@ const Map = ({ width, height }: { width: string; height: string }) => {
           currentMarker={marker}
           markers={markers}
           setPlaces={setMarkers}
+          setLoading={setLoading}
         />
 
         <ZoomControl position="bottomright" />
