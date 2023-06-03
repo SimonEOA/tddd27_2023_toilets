@@ -55,15 +55,14 @@ model User {
   updatedAt      DateTime  @updatedAt @map("updated_at")
   emailVerified  DateTime?
   image          String?
-  places         Place[]   @relation("UserPlaces") // Existing relation for places created by the user
+  places         Place[]   @relation("UserPlaces")
   reviews        Review[]
   accounts       Account[]
   sessions       Session[]
-  favoritePlaces Place[]   @relation("UserFavoritePlaces") // New relation for favorite places
+  favoritePlaces Place[]   @relation("UserFavoritePlaces")
 
   @@map("users")
 }
-
 
 model Review {
   id        String   @id @default(cuid())
@@ -92,8 +91,7 @@ model Place {
   ownerId     String
   verified    Boolean
   images      String[]
-  owner       User     @relation("UserPlaces", fields: [ownerId], references: [id]) // Existing relation for places created by the user
+  owner       User     @relation("UserPlaces", fields: [ownerId], references: [id])
   reviews     Review[]
-  favoritedBy  User[]   @relation("UserFavoritePlaces") // Relation to the users who have favorited this place
+  favoritedBy User[]   @relation("UserFavoritePlaces")
 }
-
