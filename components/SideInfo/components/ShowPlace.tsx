@@ -109,6 +109,7 @@ const ShowPlace = ({
               ? "#ffc40c"
               : "lightgray"
           }
+          cursor={"pointer"}
         />
       </Flex>
       <ShowImage images={place.images} />
