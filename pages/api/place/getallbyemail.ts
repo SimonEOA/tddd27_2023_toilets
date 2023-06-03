@@ -3,7 +3,7 @@ import prisma from "../../../lib/prisma";
 
 export default async function handler(req, res) {
   const session = await getSession({ req });
-  const { email } = session.user;
+  const { email } = session?.user;
 
   try {
     const places = await prisma.place.findMany({
