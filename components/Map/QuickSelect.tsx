@@ -13,6 +13,7 @@ import { LatLng } from "leaflet";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { useMap } from "react-leaflet";
 import { Place } from "../../types/markerTypes";
+import { useSession } from "next-auth/react";
 
 const QuickSelect = ({
   setPlaces,
@@ -29,6 +30,7 @@ const QuickSelect = ({
 }) => {
   const map = useMap();
   const toast = useToast();
+  const { data: session, status } = useSession();
 
   const fetchData = async (ne: LatLng, sw: LatLng) => {
     const response = await axios(
@@ -60,6 +62,7 @@ const QuickSelect = ({
   };
 
   useEffect(() => {
+    if (status === "unauthenticated") return;
     fetchYourPlaces();
     fetchFavourites();
   }, []);
