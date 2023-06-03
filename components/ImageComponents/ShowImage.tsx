@@ -1,5 +1,5 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import { VStack, Text, Image, HStack, IconButton } from "@chakra-ui/react";
+import { HStack, IconButton, Image, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 const ShowImage = ({ images }: { images: string[] }) => {

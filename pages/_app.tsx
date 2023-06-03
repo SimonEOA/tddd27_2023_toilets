@@ -1,6 +1,6 @@
 import { ChakraProvider } from "@chakra-ui/react";
-import { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
+import { AppProps } from "next/app";
 import { theme } from "../themes/theme";
 
 // chakra theme that changes .leaflet-popup-content-wrapper background color

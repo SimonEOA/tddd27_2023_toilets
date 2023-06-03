@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { VStack } from "@chakra-ui/react";
 import "leaflet/dist/leaflet.css";
 import dynamic from "next/dynamic";
-import { VStack } from "@chakra-ui/react";
 
-import { Place } from "../types/markerTypes";
 import Header from "../components/Header";
 
 const Blog = () => {

@@ -1,16 +1,7 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Grid,
-  HStack,
-  Heading,
-  Text,
-} from "@chakra-ui/react";
-import { signIn, signOut, useSession } from "next-auth/react";
-import { ATTRIBUTE_IMAGES } from "../../../types/Attributes";
+import { Flex } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useState } from "react";
+import { ATTRIBUTE_IMAGES } from "../../../types/Attributes";
 
 interface AttributesProps {
   attributes: string[];

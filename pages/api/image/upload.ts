@@ -1,7 +1,7 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { supabase } from "../../../lib/supabase";
 import formidable from "formidable";
 import { createReadStream } from "fs";
+import { NextApiRequest, NextApiResponse } from "next";
+import { supabase } from "../../../lib/supabase";
 
 export const config = {
   api: {

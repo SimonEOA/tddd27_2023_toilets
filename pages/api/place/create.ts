@@ -14,8 +14,6 @@ export default async function handler(req, res) {
     images,
   } = req.body;
 
-  console.log(images);
-
   try {
     const place = await prisma.place.create({
       data: {

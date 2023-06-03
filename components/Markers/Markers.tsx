@@ -1,10 +1,10 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { LayerGroup, useMap, useMapEvent, useMapEvents } from "react-leaflet";
-import { MarkerType, Place } from "../../types/markerTypes";
-import CustomMarker from "./CustomMarker";
-import { LatLng } from "leaflet";
-import axios from "axios";
 import { useToast } from "@chakra-ui/react";
+import axios from "axios";
+import { LatLng } from "leaflet";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { LayerGroup, useMap, useMapEvent } from "react-leaflet";
+import { Place } from "../../types/markerTypes";
+import CustomMarker from "./CustomMarker";
 
 type Props = {
   markers: Place[];

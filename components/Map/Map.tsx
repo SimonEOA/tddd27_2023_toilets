@@ -1,18 +1,7 @@
 import { useRef, useState } from "react";
 import { MapContainer, TileLayer, ZoomControl } from "react-leaflet";
 
-import {
-  Box,
-  Button,
-  Flex,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuGroup,
-  MenuItem,
-  MenuList,
-  Spinner,
-} from "@chakra-ui/react";
+import { Box, Flex, Spinner } from "@chakra-ui/react";
 import "leaflet-geosearch/dist/geosearch.css";
 import "leaflet/dist/leaflet.css";
 import { Place, Point } from "../../types/markerTypes";
@@ -22,8 +11,8 @@ import { MapType, StandardMap } from "../../types/mapTypes";
 import { ActionButton } from "../ActionButton/ActionButton";
 import MapSelector from "../MapSelector/MapSelector";
 import SideInfo from "../SideInfo/SideInfo";
-import SearchField from "./SearchField";
 import QuickSelect from "./QuickSelect";
+import SearchField from "./SearchField";
 
 const Map = ({ width, height }: { width: string; height: string }) => {
   const [geoData, setGeoData] = useState<Point>({

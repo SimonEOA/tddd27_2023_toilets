@@ -1,5 +1,4 @@
 import prisma from "../../../lib/prisma";
-import getPlaceById from "./getbyplaceid";
 
 export default async function handler(req, res) {
   const { content, rating, userId, placeId } = req.body;
@@ -20,7 +19,6 @@ export default async function handler(req, res) {
         user: true,
       },
     });
-
 
     const averageRating = await prisma.review.aggregate({
       where: {
@@ -43,16 +41,12 @@ export default async function handler(req, res) {
     const result = {
       review: review,
       averageRating: averageRating._avg.rating,
-    }
+    };
     res.status(200).json(result);
-
   } catch (e) {
     console.log(e);
     res.status(500).json({ error: "Error creating place" });
   } finally {
     await prisma.$disconnect();
   }
-
-
-
 }

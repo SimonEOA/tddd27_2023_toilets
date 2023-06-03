@@ -9,10 +9,10 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Place } from "../../types/markerTypes";
-import { useMap } from "react-leaflet";
 import { LatLng } from "leaflet";
+import { Dispatch, SetStateAction, useEffect } from "react";
+import { useMap } from "react-leaflet";
+import { Place } from "../../types/markerTypes";
 
 const QuickSelect = ({
   setPlaces,

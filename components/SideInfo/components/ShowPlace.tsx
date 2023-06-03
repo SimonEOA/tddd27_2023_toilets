@@ -1,3 +1,4 @@
+import { StarIcon } from "@chakra-ui/icons";
 import {
   Divider,
   Flex,
@@ -11,14 +12,13 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
+import axios from "axios";
+import { useSession } from "next-auth/react";
 import { FaToiletPaper } from "react-icons/fa";
 import { Place } from "../../../types/markerTypes";
 import ShowImage from "../../ImageComponents/ShowImage";
 import AttributesShower from "./AttributesShower";
 import { Reviews } from "./Reviews";
-import { StarIcon } from "@chakra-ui/icons";
-import axios from "axios";
-import { useSession } from "next-auth/react";
 
 const ShowPlace = ({
   place,

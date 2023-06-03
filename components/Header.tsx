@@ -1,8 +1,6 @@
 import { Button, Grid, HStack, Heading, Spacer, Text } from "@chakra-ui/react";
 import { signIn, signOut, useSession } from "next-auth/react";
 
-interface HeaderProps {}
-
 export default function Header() {
   const { data: session, status } = useSession();
 

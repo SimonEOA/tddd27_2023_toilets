@@ -1,3 +1,4 @@
+import { CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -6,9 +7,8 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useState, useRef, SetStateAction, Dispatch } from "react";
 import Image from "next/image";
-import { CloseIcon } from "@chakra-ui/icons";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 const ImageUpload = ({

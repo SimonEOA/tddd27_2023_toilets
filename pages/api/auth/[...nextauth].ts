@@ -1,8 +1,7 @@
-import NextAuth, { JWT, Account, Profile, User } from "next-auth";
-import { AdapterUser } from "next-auth/adapters";
-import GoogleProvider from "next-auth/providers/google";
-import { PrismaClient } from "@prisma/client";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { PrismaClient } from "@prisma/client";
+import NextAuth from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
 
 const prisma = new PrismaClient();
 

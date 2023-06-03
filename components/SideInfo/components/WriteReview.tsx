@@ -108,8 +108,6 @@ const WriteReview = ({
         }}
       ></Textarea>
 
-      <Button>Add a photo</Button>
-
       <HStack justify={"flex-end"}>
         <Button
           onClick={() => {

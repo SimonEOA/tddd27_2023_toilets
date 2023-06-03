@@ -1,5 +1,5 @@
 import { Box, Select } from "@chakra-ui/react";
-import { MapType, MapList } from "../../types/mapTypes";
+import { MapList, MapType } from "../../types/mapTypes";
 
 interface MapSelectorProps {
   handleSetMapStyle: (map: MapType) => void;

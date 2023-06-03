@@ -1,17 +1,9 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Grid,
-  HStack,
-  Heading,
-  Text,
-} from "@chakra-ui/react";
-import { signIn, signOut, useSession } from "next-auth/react";
-import { ATTRIBUTE_IMAGES } from "../../../types/Attributes";
+import { Flex } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import useOpenClose from "../../../hooks/useOpenClose";
+import { ATTRIBUTE_IMAGES } from "../../../types/Attributes";
 import { Place } from "../../../types/markerTypes";
 
 interface AttributesProps {

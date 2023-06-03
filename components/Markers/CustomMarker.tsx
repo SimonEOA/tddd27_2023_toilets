@@ -1,15 +1,9 @@
-import { LayerGroup, Marker, Popup, useMap, useMapEvents } from "react-leaflet";
-import { Icon, point } from "leaflet";
-import { MarkerType, Place, Point } from "../../types/markerTypes";
-import Image from "next/image";
-import { Flex, Box, Button, Input, Text } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
+import { Icon } from "leaflet";
 import { useSession } from "next-auth/react";
-import { on } from "events";
 import { useRouter } from "next/router";
-import { marker } from "leaflet";
-import { ATTRIBUTE_IMAGES } from "../../types/Attributes";
-import AttributesShower from "../SideInfo/components/AttributesShower";
+import { useEffect, useRef, useState } from "react";
+import { Marker, Popup, useMap } from "react-leaflet";
+import { Place, Point } from "../../types/markerTypes";
 import CustomPopupBox from "./CustomPopupBox";
 
 const ToiletIcon = new Icon({

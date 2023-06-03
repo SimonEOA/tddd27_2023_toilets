@@ -1,7 +1,7 @@
-import { Flex, Box, Button, Input, Text, Icon } from "@chakra-ui/react";
+import { Flex, Icon, Text } from "@chakra-ui/react";
+import { FaToiletPaper } from "react-icons/fa";
 import { Place } from "../../types/markerTypes";
 import AttributesShower from "../SideInfo/components/AttributesShower";
-import { FaToiletPaper } from "react-icons/fa";
 
 interface CustomMarkerProps {
   place: Place;
