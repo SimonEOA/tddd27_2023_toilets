@@ -1,24 +1,21 @@
-import { StarIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
+  Divider,
   HStack,
-  Stack,
-  Tab,
-  Text,
-  Textarea,
+  Icon,
   Image,
   Progress,
+  Stack,
+  Text,
   VStack,
-  Divider,
-  Spinner,
   useToast,
 } from "@chakra-ui/react";
 import { Review, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { FaToiletPaper } from "react-icons/fa";
 import { Place } from "../../../types/markerTypes";
-import { get } from "http";
 import WriteReview from "./WriteReview";
 
 interface ReviewCount {
@@ -78,7 +75,6 @@ export const Reviews = ({
       setAddReview(false);
       if (res.status === 200) {
         setReviews((prev) => [...prev, data.review]);
-        console.log(data);
         setAverageRating(data.averageRating);
 
         getRatings();
@@ -177,10 +173,11 @@ export const Reviews = ({
                 {[...Array(5)].map((_, index) => {
                   index += 1;
                   return (
-                    <StarIcon
-                      color={index <= place?.rating ? "#ffc40c" : "#BEBEBE"}
+                    <Icon
+                      color={index <= place?.rating ? "lightblue" : "#BEBEBE"}
                       boxSize="13px"
                       key={index}
+                      as={FaToiletPaper}
                     />
                   );
                 })}
@@ -223,10 +220,13 @@ export const Reviews = ({
                     {[...Array(5)].map((_, index) => {
                       index += 1;
                       return (
-                        <StarIcon
-                          color={index <= review.rating ? "#ffc40c" : "#BEBEBE"}
+                        <Icon
+                          color={
+                            index <= review.rating ? "lightblue" : "#BEBEBE"
+                          }
                           boxSize="13px"
                           key={index}
+                          as={FaToiletPaper}
                         />
                       );
                     })}

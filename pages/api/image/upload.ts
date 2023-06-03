@@ -1,7 +1,7 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { supabase } from "../../../lib/supabase";
 import formidable from "formidable";
 import { createReadStream } from "fs";
+import { NextApiRequest, NextApiResponse } from "next";
+import { supabase } from "../../../lib/supabase";
 
 export const config = {
   api: {
@@ -44,14 +44,10 @@ export default async function uploadHandler(
           contentType: "image/jpeg", // Set the Content-Type header
         });
 
-      console.log("data", data);
-      console.log("error", error);
-
       if (error) {
         console.error("Upload error:", error);
         return res.status(500).json({ message: "Upload error" });
       } else if (data) {
-        console.log("Upload successful:", data);
         // Do something with the uploaded file, such as saving its URL to a database
 
         return res.status(200).json({ message: "Upload successful" });

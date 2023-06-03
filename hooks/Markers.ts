@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from "react";
 
 export function useFetchData(url) {
   const [markers, setData] = useState(null);
@@ -7,12 +7,12 @@ export function useFetchData(url) {
   useEffect(() => {
     setLoading(true);
     fetch(url)
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         setData(data);
         setLoading(false);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
         setLoading(false);
       });

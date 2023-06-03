@@ -1,16 +1,7 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Grid,
-  HStack,
-  Heading,
-  Text,
-} from "@chakra-ui/react";
-import { signIn, signOut, useSession } from "next-auth/react";
-import { ATTRIBUTE_IMAGES } from "../../Attributes";
+import { Flex } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useState } from "react";
+import { ATTRIBUTE_IMAGES } from "../../../types/Attributes";
 
 interface AttributesProps {
   attributes: string[];
@@ -31,7 +22,7 @@ export default function AttributesShower({ attributes }: AttributesProps) {
             transform: "scale(1.1)",
           }}
         >
-          <Image src={ATTRIBUTE_IMAGES[key]} alt={key} width={48} height={48} />
+          <Image src={ATTRIBUTE_IMAGES[key]} alt={key} width={30} height={30} />
         </Flex>
       ))}
     </Flex>

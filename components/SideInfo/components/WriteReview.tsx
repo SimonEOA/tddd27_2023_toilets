@@ -1,9 +1,18 @@
-import { StarIcon } from "@chakra-ui/icons";
-import { Stack, HStack, Textarea, Button, Image, Text } from "@chakra-ui/react";
+import {
+  Button,
+  HStack,
+  Icon,
+  Image,
+  Stack,
+  Text,
+  Textarea,
+  useToast,
+} from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { Dispatch, SetStateAction, useState } from "react";
-import { ReviewWithUser } from "./Reviews";
+import { FaToiletPaper } from "react-icons/fa";
 import { Place } from "../../../types/markerTypes";
+import { ReviewWithUser } from "./Reviews";
 
 const WriteReview = ({
   place,
@@ -27,9 +36,17 @@ const WriteReview = ({
   const [content, setContent] = useState<string>(""); // content of review
   const [rating, setRating] = useState<number>(null); // rating of review
 
+  const toast = useToast();
+
   const submitReview = async () => {
-    if (!session) console.log("Not logged in");
-    else {
+    if (!session) {
+      toast({
+        title: "You must be signed in to leave a review.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } else {
       const res = await fetch("/api/review/create", {
         method: "POST",
         body: JSON.stringify({
@@ -47,13 +64,19 @@ const WriteReview = ({
       setAddReview(false);
       if (res.status === 200) {
         setReviews((prev) => [...prev, data.review]);
-        console.log(data);
         setAverageRating(data.averageRating);
         setCurrentPlace((prev) => {
           return {
             ...prev,
             averageRating: data.averageRating,
           };
+        });
+
+        toast({
+          title: "Review submitted.",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
         });
 
         getRatings();
@@ -77,14 +100,15 @@ const WriteReview = ({
           {[...Array(5)].map((_, index) => {
             index += 1;
             return (
-              <StarIcon
-                color={index <= rating ? "#ffc40c" : "#BEBEBE"}
+              <Icon
+                color={index <= rating ? "lightblue" : "#BEBEBE"}
                 boxSize="13px"
                 key={index}
                 onClick={() => {
                   setRating(index);
                 }}
                 cursor={"pointer"}
+                as={FaToiletPaper}
               />
             );
           })}
@@ -98,8 +122,6 @@ const WriteReview = ({
           setContent(e.target.value);
         }}
       ></Textarea>
-
-      <Button>Add a photo</Button>
 
       <HStack justify={"flex-end"}>
         <Button

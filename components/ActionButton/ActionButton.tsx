@@ -1,7 +1,6 @@
-import { Box, Button, Flex } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 
 import { Place } from "../../types/markerTypes";
-import handle from "../../pages/api/user/create";
 
 type Props = {
   setAddMarker: React.Dispatch<React.SetStateAction<boolean>>;

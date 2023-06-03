@@ -1,10 +1,10 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { LayerGroup, useMap, useMapEvent, useMapEvents } from "react-leaflet";
-import { MarkerType, Place } from "../../types/markerTypes";
-import CustomMarker from "./CustomMarker";
-import { LatLng } from "leaflet";
-import axios from "axios";
 import { useToast } from "@chakra-ui/react";
+import axios from "axios";
+import { LatLng } from "leaflet";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { LayerGroup, useMap, useMapEvent } from "react-leaflet";
+import { Place } from "../../types/markerTypes";
+import CustomMarker from "./CustomMarker";
 
 type Props = {
   markers: Place[];
@@ -29,9 +29,8 @@ export const Markers: React.FC<Props> = ({
 
   const map = useMap();
   const toast = useToast();
-  useMapEvent("click", (e) => {
-    console.log("click", add, popupOpen);
 
+  useMapEvent("click", (e) => {
     if (add && !popupOpen) {
       // if tmpPlace is not null then remove it from the map
       if (tempPlace == null) {
@@ -72,10 +71,6 @@ export const Markers: React.FC<Props> = ({
     setCurrentMarker(null);
   };
 
-  const handlePlaces = (place: Place) => {
-    setPlaces([...markers, place]);
-  };
-
   const handlePopupClose = () => {
     setPopupOpen(false);
 
@@ -89,7 +84,6 @@ export const Markers: React.FC<Props> = ({
         setCurrentMarker(null);
       }
     } else {
-      console.log("here");
       setCurrentMarker(null);
     }
   };
