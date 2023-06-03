@@ -1,9 +1,17 @@
-import { StarIcon } from "@chakra-ui/icons";
-import { Stack, HStack, Textarea, Button, Image, Text } from "@chakra-ui/react";
+import {
+  Button,
+  HStack,
+  Icon,
+  Image,
+  Stack,
+  Text,
+  Textarea,
+} from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { Dispatch, SetStateAction, useState } from "react";
-import { ReviewWithUser } from "./Reviews";
+import { FaToiletPaper } from "react-icons/fa";
 import { Place } from "../../../types/markerTypes";
+import { ReviewWithUser } from "./Reviews";
 
 const WriteReview = ({
   place,
@@ -77,14 +85,15 @@ const WriteReview = ({
           {[...Array(5)].map((_, index) => {
             index += 1;
             return (
-              <StarIcon
-                color={index <= rating ? "#ffc40c" : "#BEBEBE"}
+              <Icon
+                color={index <= rating ? "lightblue" : "#BEBEBE"}
                 boxSize="13px"
                 key={index}
                 onClick={() => {
                   setRating(index);
                 }}
                 cursor={"pointer"}
+                as={FaToiletPaper}
               />
             );
           })}

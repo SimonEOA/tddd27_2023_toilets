@@ -16,10 +16,17 @@ import { LatLng } from "leaflet";
 
 const QuickSelect = ({
   setPlaces,
+  setFavourites,
+  favourites,
+  setYourPlaces,
+  yourPlaces,
 }: {
   setPlaces: Dispatch<SetStateAction<Place[]>>;
+  setFavourites: Dispatch<SetStateAction<Place[]>>;
+  favourites: Place[];
+  setYourPlaces: Dispatch<SetStateAction<Place[]>>;
+  yourPlaces: Place[];
 }) => {
-  const [yourPlaces, setYourPlaces] = useState<Place[]>([]);
   const map = useMap();
   const toast = useToast();
 
@@ -27,25 +34,6 @@ const QuickSelect = ({
     const response = await axios(
       `api/place/getallbyarea?nelat=${ne.lat}&nelng=${ne.lng}&swlat=${sw.lat}&swlng=${sw.lng}`
     );
-    const data = await response.data;
-
-    if (response.status === 200) {
-      setPlaces(data);
-      toast({
-        title: `Area search success!`,
-        status: "success",
-        variant: "subtle",
-        duration: 3000,
-        isClosable: true,
-      });
-    } else {
-      toast({
-        title: `Error fetching places in area!`,
-        status: "error",
-        variant: "subtle",
-        isClosable: true,
-      });
-    }
   };
 
   const fetchYourPlaces = async () => {
@@ -57,6 +45,15 @@ const QuickSelect = ({
     }
   };
 
+  const fetchFavourites = async () => {
+    const response = await axios(`api/user/getallfavourites`);
+    const data = await response.data;
+
+    if (response.status === 200) {
+      setFavourites(data);
+    }
+  };
+
   const handleSelectPlace = (place: Place) => {
     map.panTo([place.latitude, place.longitude]);
     fetchData(map.getBounds().getNorthEast(), map.getBounds().getSouthWest());
@@ -64,6 +61,7 @@ const QuickSelect = ({
 
   useEffect(() => {
     fetchYourPlaces();
+    fetchFavourites();
   }, []);
 
   return (
@@ -73,8 +71,11 @@ const QuickSelect = ({
       </MenuButton>
       <MenuList>
         <MenuGroup title="Favourites">
-          <MenuItem>My Account</MenuItem>
-          <MenuItem>Payments </MenuItem>
+          {favourites.map((place) => (
+            <MenuItem key={place.id} onClick={() => handleSelectPlace(place)}>
+              {place.address}
+            </MenuItem>
+          ))}
         </MenuGroup>
         <MenuDivider />
         <MenuGroup title="Your Places">

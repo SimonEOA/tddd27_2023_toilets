@@ -18,11 +18,13 @@ export const CreatePlace = ({
   setCurrentPlace,
   setPlaces,
   isOpen,
+  setYourPlaces,
 }: {
   place: Place;
   setCurrentPlace: Dispatch<SetStateAction<Place>>;
   setPlaces: Dispatch<SetStateAction<Place[]>>;
   isOpen: boolean;
+  setYourPlaces: Dispatch<SetStateAction<Place[]>>;
 }) => {
   if (!place) return null;
   if (!isOpen) return null;
@@ -115,6 +117,7 @@ export const CreatePlace = ({
           setPlaces((prev) => [...prev, data]);
           setCurrentPlace(data);
           setPlaces((prev) => prev.filter((place) => place.id !== null));
+          setYourPlaces((prev) => [...prev, data]);
           toast({
             title: `Place added!`,
             status: "success",

@@ -1,39 +1,116 @@
-import { StarIcon } from "@chakra-ui/icons";
 import {
-  VStack,
-  Button,
+  Divider,
   Flex,
   HStack,
-  Tabs,
-  TabList,
+  Icon,
   Tab,
-  TabPanels,
+  TabList,
   TabPanel,
-  Divider,
-  Box,
-  Image,
+  TabPanels,
+  Tabs,
   Text,
-  Show,
+  useToast,
 } from "@chakra-ui/react";
+import { FaToiletPaper } from "react-icons/fa";
+import { Place } from "../../../types/markerTypes";
+import ShowImage from "../../ImageComponents/ShowImage";
 import AttributesShower from "./AttributesShower";
 import { Reviews } from "./Reviews";
-import { Place } from "../../../types/markerTypes";
-import { useState } from "react";
-import ShowImage from "../../ImageComponents/ShowImage";
+import { StarIcon } from "@chakra-ui/icons";
+import axios from "axios";
+import { useSession } from "next-auth/react";
 
 const ShowPlace = ({
   place,
   setCurrentPlace,
-  setPlaces,
   attributes,
+  favourites,
+  setFavourites,
 }: {
   place: Place;
   setCurrentPlace: React.Dispatch<React.SetStateAction<Place>>;
-  setPlaces: React.Dispatch<React.SetStateAction<Place[]>>;
   attributes: string[];
+  favourites: Place[];
+  setFavourites: React.Dispatch<React.SetStateAction<Place[]>>;
 }) => {
+  const toast = useToast();
+
+  const { data: session, status } = useSession();
+
+  const handleAddToFavorites = async () => {
+    const response = await axios.post(`api/user/addtofavourites`, {
+      placeId: place.id,
+      email: session?.user?.email,
+    });
+    const data = await response.data;
+
+    if (response.status === 200) {
+      toast({
+        title: `Added to favorites!`,
+        status: "success",
+        variant: "subtle",
+        duration: 3000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: `Error adding to favorites!`,
+        status: "error",
+        variant: "subtle",
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleRemoveFromFavorites = async () => {
+    const response = await axios.post(`api/user/removefromfavourites`, {
+      placeId: place.id,
+      email: session?.user?.email,
+    });
+    const data = await response.data;
+
+    if (response.status === 200) {
+      toast({
+        title: `Removed from favorites!`,
+        status: "success",
+        variant: "subtle",
+        duration: 3000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: `Error removing from favorites!`,
+        status: "error",
+        variant: "subtle",
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleClickFavourite = () => {
+    if (favourites.some((favourite) => favourite.id === place.id)) {
+      handleRemoveFromFavorites();
+      setFavourites(
+        favourites.filter((favourite) => favourite.id !== place.id)
+      );
+    } else {
+      handleAddToFavorites();
+      setFavourites([...favourites, place]);
+    }
+  };
+
   return (
     <Flex w={"100%"} align={"center"} justify={"center"} direction={"column"}>
+      <Flex w="90%" justify={"end"} align={"center"}>
+        <StarIcon
+          onClick={handleClickFavourite}
+          color={
+            favourites.some((favourite) => favourite.id === place.id)
+              ? "#ffc40c"
+              : "lightgray"
+          }
+        />
+      </Flex>
       <ShowImage images={place.images} />
       <HStack justify={"space-between"} w="90%">
         <Text fontSize={"xl"} fontWeight={"bold"}>
@@ -44,10 +121,11 @@ const ShowPlace = ({
           {[...Array(5)].map((_, index) => {
             index += 1;
             return (
-              <StarIcon
-                color={index <= place?.rating ? "#ffc40c" : "#BEBEBE"}
+              <Icon
+                color={index <= place?.rating ? "lightblue" : "#BEBEBE"}
                 boxSize="13px"
                 key={index}
+                as={FaToiletPaper}
               />
             );
           })}

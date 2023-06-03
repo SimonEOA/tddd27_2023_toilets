@@ -36,6 +36,9 @@ const Map = ({ width, height }: { width: string; height: string }) => {
   const [mapStyle, setMapStyle] = useState<MapType>(StandardMap);
   const [loading, setLoading] = useState(false);
 
+  const [favourites, setFavourites] = useState<Place[]>([]);
+  const [yourPlaces, setYourPlaces] = useState<Place[]>([]);
+
   const activeMarkerRef = useRef(null);
 
   const handleSetMapStyle = (map: MapType) => {
@@ -48,6 +51,9 @@ const Map = ({ width, height }: { width: string; height: string }) => {
         place={marker}
         setCurrentPlace={setMarker}
         setPlaces={setMarkers}
+        favourites={favourites}
+        setFavourites={setFavourites}
+        setYourPlaces={setYourPlaces}
       ></SideInfo>
       <ActionButton
         addMarker={addMarker}
@@ -81,7 +87,13 @@ const Map = ({ width, height }: { width: string; height: string }) => {
               minW={"60px"}
               margin={"10px auto 0"}
             >
-              <QuickSelect setPlaces={setMarkers} />
+              <QuickSelect
+                setPlaces={setMarkers}
+                setFavourites={setFavourites}
+                favourites={favourites}
+                setYourPlaces={setYourPlaces}
+                yourPlaces={yourPlaces}
+              />
               {loading && (
                 <Flex align={"center"}>
                   <Spinner zIndex={9999} />

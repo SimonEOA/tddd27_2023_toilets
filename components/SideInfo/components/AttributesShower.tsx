@@ -31,7 +31,7 @@ export default function AttributesShower({ attributes }: AttributesProps) {
             transform: "scale(1.1)",
           }}
         >
-          <Image src={ATTRIBUTE_IMAGES[key]} alt={key} width={48} height={48} />
+          <Image src={ATTRIBUTE_IMAGES[key]} alt={key} width={30} height={30} />
         </Flex>
       ))}
     </Flex>

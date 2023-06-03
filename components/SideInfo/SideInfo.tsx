@@ -1,44 +1,24 @@
-import {
-  Box,
-  Button,
-  HStack,
-  Slide,
-  VStack,
-  useDisclosure,
-  Image,
-  Flex,
-  Text,
-  Divider,
-  Icon,
-  Tab,
-  Tabs,
-  TabList,
-  TabPanels,
-  TabPanel,
-} from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
+import { Box, HStack, VStack } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import useOpenClose from "../../hooks/useOpenClose";
-import {
-  DeleteIcon,
-  MoonIcon,
-  PhoneIcon,
-  StarIcon,
-  SunIcon,
-} from "@chakra-ui/icons";
-import { Reviews } from "./components/Reviews";
-import { CreatePlace } from "./components/CreatePlace";
 import { Place } from "../../types/markerTypes";
-import AttributesShower from "./components/AttributesShower";
+import { CreatePlace } from "./components/CreatePlace";
 import ShowPlace from "./components/ShowPlace";
 
 const SideInfo = ({
   place,
   setCurrentPlace,
   setPlaces,
+  favourites,
+  setFavourites,
+  setYourPlaces,
 }: {
   place: Place;
   setCurrentPlace: React.Dispatch<React.SetStateAction<Place>>;
   setPlaces: React.Dispatch<React.SetStateAction<Place[]>>;
+  favourites: Place[];
+  setFavourites: React.Dispatch<React.SetStateAction<Place[]>>;
+  setYourPlaces: React.Dispatch<React.SetStateAction<Place[]>>;
 }) => {
   const { isOpen, toggle, close, open } = useOpenClose();
   const [attributes, setAttributes] = useState<string[]>([]);
@@ -69,14 +49,16 @@ const SideInfo = ({
         transition="transform 0.3s ease-in-out, opacity 0.3s ease-in-out"
         transform={isOpen ? "translateX(0)" : "translateX(-100%)"}
         opacity={isOpen ? 1 : 0}
+        background="#f5feff"
       >
         <VStack overflow={"auto"} paddingY="20px" h="100%">
           {place?.verified ? (
             <ShowPlace
               place={place}
               setCurrentPlace={setCurrentPlace}
-              setPlaces={setPlaces}
               attributes={attributes}
+              favourites={favourites}
+              setFavourites={setFavourites}
             />
           ) : (
             <CreatePlace
@@ -84,6 +66,7 @@ const SideInfo = ({
               setCurrentPlace={setCurrentPlace}
               setPlaces={setPlaces}
               isOpen={isOpen}
+              setYourPlaces={setYourPlaces}
             />
           )}
         </VStack>
