@@ -73,8 +73,8 @@ model Review {
   userId    String
   placeId   String
   images    String[]
-  place     Place    @relation(fields: [placeId], references: [id])
-  user      User     @relation(fields: [userId], references: [id])
+  place     Place    @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Place {
@@ -91,7 +91,7 @@ model Place {
   ownerId     String
   verified    Boolean
   images      String[]
-  owner       User     @relation("UserPlaces", fields: [ownerId], references: [id])
+  owner       User     @relation("UserPlaces", fields: [ownerId], references: [id], onDelete: Cascade) // Existing relation for places created by the user
   reviews     Review[]
   favoritedBy User[]   @relation("UserFavoritePlaces")
 }
