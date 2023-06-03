@@ -7,7 +7,6 @@ export default async function handler(req, res) {
         owner: true,
       },
     });
-    // console.log(places);
     res.status(200).json(places);
     return places;
   } catch (e) {

@@ -31,8 +31,6 @@ export const Markers: React.FC<Props> = ({
   const toast = useToast();
 
   useMapEvent("click", (e) => {
-    console.log("click", add, popupOpen);
-
     if (add && !popupOpen) {
       // if tmpPlace is not null then remove it from the map
       if (tempPlace == null) {
@@ -86,7 +84,6 @@ export const Markers: React.FC<Props> = ({
         setCurrentMarker(null);
       }
     } else {
-      console.log("here");
       setCurrentMarker(null);
     }
   };

@@ -32,7 +32,6 @@ const Map = ({ width, height }: { width: string; height: string }) => {
 
   const handleSetMapStyle = (map: MapType) => {
     setMapStyle(map);
-    console.log(map);
   };
   return (
     <Box pos={"relative"}>

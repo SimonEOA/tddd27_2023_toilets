@@ -53,7 +53,6 @@ export const CreatePlace = ({
         });
 
         if (response.ok) {
-          console.log("Upload successful");
           // Handle successful upload
           setImageNames((prevImageNames) => [...prevImageNames, imageName]); // Update the imageNames state
         } else {
@@ -87,8 +86,6 @@ export const CreatePlace = ({
         isClosable: true,
       });
     } else {
-      console.log(place);
-
       try {
         setLoading(true);
         await handleUpload(); // Wait for image uploads to finish

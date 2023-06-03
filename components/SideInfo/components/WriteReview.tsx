@@ -6,6 +6,7 @@ import {
   Stack,
   Text,
   Textarea,
+  useToast,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -35,9 +36,17 @@ const WriteReview = ({
   const [content, setContent] = useState<string>(""); // content of review
   const [rating, setRating] = useState<number>(null); // rating of review
 
+  const toast = useToast();
+
   const submitReview = async () => {
-    if (!session) console.log("Not logged in");
-    else {
+    if (!session) {
+      toast({
+        title: "You must be signed in to leave a review.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } else {
       const res = await fetch("/api/review/create", {
         method: "POST",
         body: JSON.stringify({
@@ -55,13 +64,19 @@ const WriteReview = ({
       setAddReview(false);
       if (res.status === 200) {
         setReviews((prev) => [...prev, data.review]);
-        console.log(data);
         setAverageRating(data.averageRating);
         setCurrentPlace((prev) => {
           return {
             ...prev,
             averageRating: data.averageRating,
           };
+        });
+
+        toast({
+          title: "Review submitted.",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
         });
 
         getRatings();

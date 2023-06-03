@@ -75,7 +75,6 @@ export const Reviews = ({
       setAddReview(false);
       if (res.status === 200) {
         setReviews((prev) => [...prev, data.review]);
-        console.log(data);
         setAverageRating(data.averageRating);
 
         getRatings();

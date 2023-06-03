@@ -32,9 +32,6 @@ const SideInfo = ({
     }
   }, [place]);
 
-  useEffect(() => {
-    console.log("open", isOpen);
-  }, [isOpen]);
   return (
     <HStack justify={"center"}>
       <Box
