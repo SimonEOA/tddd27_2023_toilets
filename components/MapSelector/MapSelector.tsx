@@ -1,6 +1,4 @@
-import { Box, Flex, Select } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
-import { Dispatch } from "react";
+import { Box, Select } from "@chakra-ui/react";
 import { MapType, MapList } from "../../types/mapTypes";
 
 interface MapSelectorProps {

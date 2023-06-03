@@ -1,52 +1,42 @@
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import { MapContainer, TileLayer, ZoomControl } from "react-leaflet";
 
-import { Box, Spinner } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuGroup,
+  MenuItem,
+  MenuList,
+  Spinner,
+} from "@chakra-ui/react";
 import "leaflet-geosearch/dist/geosearch.css";
 import "leaflet/dist/leaflet.css";
-import { Place, Point } from "../types/markerTypes";
-import { Markers } from "./Markers/Markes";
+import { Place, Point } from "../../types/markerTypes";
+import { Markers } from "../Markers/Markers";
 
-import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
-import { useMap } from "react-leaflet";
-import { MapType, StandardMap } from "../types/mapTypes";
-import { ActionButton } from "./ActionButton/ActionButton";
-import MapSelector from "./MapSelector/MapSelector";
-import SideInfo from "./SideInfo/SideInfo";
-
-const SearchField = () => {
-  const provider = new OpenStreetMapProvider();
-
-  const searchControl = GeoSearchControl({
-    provider: provider,
-    ZoomControl: true,
-    autoClose: true,
-    retainZoomLevel: false,
-    animateZoom: true,
-    keepResult: false,
-    searchLabel: "search",
-    keepOpen: false,
-    style: "bar",
-  });
-
-  const map = useMap();
-  useEffect(() => {
-    map.addControl(searchControl);
-    return () => {
-      map.removeControl(searchControl);
-    };
-  }, []);
-
-  return null;
-};
+import { MapType, StandardMap } from "../../types/mapTypes";
+import { ActionButton } from "../ActionButton/ActionButton";
+import MapSelector from "../MapSelector/MapSelector";
+import SideInfo from "../SideInfo/SideInfo";
+import SearchField from "./SearchField";
+import QuickSelect from "./QuickSelect";
 
 const Map = ({ width, height }: { width: string; height: string }) => {
-  const [geoData, setGeoData] = useState<Point>({ lat: 63, lng: 16 });
+  const [geoData, setGeoData] = useState<Point>({
+    lat: 58.4072754,
+    lng: 15.5645342,
+  });
   const [addMarker, setAddMarker] = useState(false);
   const [marker, setMarker] = useState<Place>(null);
   const [markers, setMarkers] = useState<Place[]>([]);
   const [mapStyle, setMapStyle] = useState<MapType>(StandardMap);
   const [loading, setLoading] = useState(false);
+
+  const activeMarkerRef = useRef(null);
 
   const handleSetMapStyle = (map: MapType) => {
     setMapStyle(map);
@@ -67,9 +57,6 @@ const Map = ({ width, height }: { width: string; height: string }) => {
         setMarker={setMarker}
       />{" "}
       <MapSelector handleSetMapStyle={handleSetMapStyle} />
-      {loading && (
-        <Spinner position={"absolute"} bottom={"100"} right={2} zIndex={9999} />
-      )}
       <MapContainer
         center={[geoData.lat, geoData.lng]}
         zoom={13}
@@ -82,7 +69,27 @@ const Map = ({ width, height }: { width: string; height: string }) => {
         }
         zoomControl={false}
       >
-        {!marker && <SearchField />}
+        {!marker && (
+          <>
+            <SearchField />
+            <Flex
+              position={"absolute"}
+              top={0}
+              right={0}
+              zIndex={9999}
+              w={"calc(50vw - 200px)"}
+              minW={"60px"}
+              margin={"10px auto 0"}
+            >
+              <QuickSelect setPlaces={setMarkers} />
+              {loading && (
+                <Flex align={"center"}>
+                  <Spinner zIndex={9999} />
+                </Flex>
+              )}
+            </Flex>
+          </>
+        )}
         <TileLayer attribution={mapStyle.attributes} url={mapStyle.url} />
 
         <Markers

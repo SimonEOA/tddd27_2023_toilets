@@ -47,21 +47,23 @@ model VerificationToken {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  karma         Int?      @default(0)
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime  @updatedAt @map("updated_at")
-  emailVerified DateTime?
-  image         String?
-  places        Place[]
-  reviews       Review[]
-  accounts      Account[]
-  sessions      Session[]
+  id             String    @id @default(cuid())
+  name           String?
+  email          String?   @unique
+  karma          Int?      @default(0)
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  emailVerified  DateTime?
+  image          String?
+  places         Place[]   @relation("UserPlaces") // Existing relation for places created by the user
+  reviews        Review[]
+  accounts       Account[]
+  sessions       Session[]
+  favoritePlaces Place[]   @relation("UserFavoritePlaces") // New relation for favorite places
 
   @@map("users")
 }
+
 
 model Review {
   id        String   @id @default(cuid())
@@ -90,6 +92,8 @@ model Place {
   ownerId     String
   verified    Boolean
   images      String[]
-  owner       User     @relation(fields: [ownerId], references: [id])
+  owner       User     @relation("UserPlaces", fields: [ownerId], references: [id]) // Existing relation for places created by the user
   reviews     Review[]
+  favoritedBy  User[]   @relation("UserFavoritePlaces") // Relation to the users who have favorited this place
 }
+

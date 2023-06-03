@@ -29,6 +29,7 @@ export const Markers: React.FC<Props> = ({
 
   const map = useMap();
   const toast = useToast();
+
   useMapEvent("click", (e) => {
     console.log("click", add, popupOpen);
 
@@ -70,10 +71,6 @@ export const Markers: React.FC<Props> = ({
     );
     setTempPlace(null);
     setCurrentMarker(null);
-  };
-
-  const handlePlaces = (place: Place) => {
-    setPlaces([...markers, place]);
   };
 
   const handlePopupClose = () => {

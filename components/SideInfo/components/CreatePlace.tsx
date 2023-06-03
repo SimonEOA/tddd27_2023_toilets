@@ -8,9 +8,9 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Place } from "../../../types/markerTypes";
-import ImageUpload from "../../ImageUpload";
+import ImageUpload from "../../ImageComponents/ImageUpload";
 import Attributes from "./AttributesSelector";
 
 export const CreatePlace = ({
@@ -34,6 +34,8 @@ export const CreatePlace = ({
   const [imageNames, setImageNames] = useState<string[]>([]);
 
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
+
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleUpload = async () => {
     for (let i = 0; i < selectedImages.length; i++) {
@@ -86,6 +88,7 @@ export const CreatePlace = ({
       console.log(place);
 
       try {
+        setLoading(true);
         await handleUpload(); // Wait for image uploads to finish
 
         const res = await fetch("/api/place/create", {
@@ -132,6 +135,7 @@ export const CreatePlace = ({
         console.error("Error creating place:", error);
         // Handle error creating place
       }
+      setLoading(false);
     }
   };
 
@@ -182,7 +186,8 @@ export const CreatePlace = ({
         <Text fontSize="md">Attributes</Text>
         <Attributes place={place} updateAttributes={updateAttributes} />
       </Stack>
-      <Button mt="10px" onClick={addPlace}>
+
+      <Button mt="10px" onClick={addPlace} isLoading={loading}>
         Save
       </Button>
     </Flex>

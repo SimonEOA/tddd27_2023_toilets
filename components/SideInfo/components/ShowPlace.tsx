@@ -19,7 +19,7 @@ import AttributesShower from "./AttributesShower";
 import { Reviews } from "./Reviews";
 import { Place } from "../../../types/markerTypes";
 import { useState } from "react";
-import ShowImage from "../../ShowImage";
+import ShowImage from "../../ImageComponents/ShowImage";
 
 const ShowPlace = ({
   place,

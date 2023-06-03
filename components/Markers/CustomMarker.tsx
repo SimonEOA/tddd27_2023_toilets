@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 import { on } from "events";
 import { useRouter } from "next/router";
 import { marker } from "leaflet";
-import { ATTRIBUTE_IMAGES } from "../Attributes";
+import { ATTRIBUTE_IMAGES } from "../../types/Attributes";
 import AttributesShower from "../SideInfo/components/AttributesShower";
 import CustomPopupBox from "./CustomPopupBox";
 
@@ -57,6 +57,7 @@ export default function CustomMarker({
   }
 
   const map = useMap();
+
   useEffect(() => {
     if (currentMarker?.id === null) markerRef.current.openPopup();
   }, []);

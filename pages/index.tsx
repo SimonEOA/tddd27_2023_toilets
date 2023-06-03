@@ -5,14 +5,9 @@ import { VStack } from "@chakra-ui/react";
 
 import { Place } from "../types/markerTypes";
 import Header from "../components/Header";
-import Map from "../components/Map";
 
-type Props = {
-  markers: Place[];
-};
-
-const Blog = ({ markers }: Props) => {
-  const Map = dynamic(() => import("../components/Map"), {
+const Blog = () => {
+  const Map = dynamic(() => import("../components/Map/Map"), {
     ssr: false, // disable server-side rendering
   });
 
@@ -20,7 +15,7 @@ const Blog = ({ markers }: Props) => {
     <>
       <Header />
       <VStack h="100%" justifyContent={"center"}>
-        <Map width="100vw" height="75vh"></Map>
+        <Map width="100vw" height="80vh"></Map>
       </VStack>
     </>
   );
