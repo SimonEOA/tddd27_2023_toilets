@@ -69,7 +69,7 @@ const QuickSelect = ({
 
   return (
     <Menu closeOnSelect={false}>
-      <MenuButton as={Button} size={"sm"}>
+      <MenuButton as={Button} size={"sm"} background={"#fff"}>
         Quick Select
       </MenuButton>
       <MenuList>

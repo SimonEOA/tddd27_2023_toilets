@@ -42,7 +42,7 @@ const Map = ({ width, height }: { width: string; height: string }) => {
         favourites={favourites}
         setFavourites={setFavourites}
         setYourPlaces={setYourPlaces}
-      ></SideInfo>
+      />
       <ActionButton
         addMarker={addMarker}
         setAddMarker={setAddMarker}
@@ -50,7 +50,6 @@ const Map = ({ width, height }: { width: string; height: string }) => {
         markers={markers}
         setMarker={setMarker}
       />{" "}
-      <MapSelector handleSetMapStyle={handleSetMapStyle} />
       <MapContainer
         center={[geoData.lat, geoData.lng]}
         zoom={13}
@@ -82,6 +81,8 @@ const Map = ({ width, height }: { width: string; height: string }) => {
                 setYourPlaces={setYourPlaces}
                 yourPlaces={yourPlaces}
               />
+              <MapSelector handleSetMapStyle={handleSetMapStyle} />
+
               {loading && (
                 <Flex align={"center"}>
                   <Spinner zIndex={9999} />
