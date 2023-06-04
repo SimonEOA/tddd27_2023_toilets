@@ -34,3 +34,6 @@ Supabase is an open-source alternative to Firebase that provides a range of serv
 
 Linus Rundin Induvidual screencast (linru683)
 youtube: https://youtu.be/LRvyJod6M6g
+
+Simon Ågren Individual Screencast (simag144)
+youtube: https://youtu.be/xhTRqhyGPdQ
