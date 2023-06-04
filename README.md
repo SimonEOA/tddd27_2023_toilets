@@ -31,3 +31,6 @@ Prisma is a modern database toolkit that provides an ORM (Object Relational Mapp
 
 ##### Database Service: Supabase
 Supabase is an open-source alternative to Firebase that provides a range of services including real-time data updates and authentication. We will use Supabase to store our toilet data and user authentication information.
+
+Linus Rundin Induvidual screencase (linru683)
+youtube: https://youtu.be/LRvyJod6M6g
