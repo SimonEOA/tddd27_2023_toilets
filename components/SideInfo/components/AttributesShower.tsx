@@ -8,8 +8,6 @@ interface AttributesProps {
 }
 
 export default function AttributesShower({ attributes }: AttributesProps) {
-  const { data: session, status } = useSession();
-
   return (
     <Flex justify={"space-between"} align={"center"} padding={"1em"}>
       {attributes?.map((key) => (

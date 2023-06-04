@@ -31,11 +31,8 @@ export default function CustomMarker({
   onClosed,
 }: CustomMarkerProps) {
   const [popupOpen, setPopupOpen] = useState(false);
-  const [address, setAddress] = useState("");
   const markerRef = useRef(null);
   const popupref = useRef(null);
-  const { data: session, status } = useSession();
-  const router = useRouter();
 
   function handlePopupOpen() {
     setCurrentMarker(place);

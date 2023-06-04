@@ -1,6 +1,10 @@
+import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
 
-export default async function getPlaceById(req, res) {
+export default async function getPlaceById(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   try {
     const reviews = await prisma.review.findMany({
       where: {

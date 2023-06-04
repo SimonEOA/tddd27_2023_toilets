@@ -25,7 +25,7 @@ export const Markers: React.FC<Props> = ({
   const [popupOpen, setPopupOpen] = useState(false);
   const [isPanning, setIsPanning] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(0);
-  const [tempPlace, setTempPlace] = useState<Place>(null);
+  const [tempPlace, setTempPlace] = useState<Place | null>(null);
 
   const map = useMap();
   const toast = useToast();

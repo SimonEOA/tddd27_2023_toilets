@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { MapContainer, TileLayer, ZoomControl } from "react-leaflet";
 
 import { Box, Flex, Spinner } from "@chakra-ui/react";
@@ -27,8 +27,6 @@ const Map = ({ width, height }: { width: string; height: string }) => {
 
   const [favourites, setFavourites] = useState<Place[]>([]);
   const [yourPlaces, setYourPlaces] = useState<Place[]>([]);
-
-  const activeMarkerRef = useRef(null);
 
   const handleSetMapStyle = (map: MapType) => {
     setMapStyle(map);

@@ -16,7 +16,6 @@ export default function AttributesSelector({
   place,
 }: AttributesProps) {
   const [selectedImages, setSelectedImages] = useState([]);
-  const { isOpen, toggle, close, open } = useOpenClose();
 
   const handleImageClick = (key) => {
     if (selectedImages.includes(key)) {
@@ -30,8 +29,6 @@ export default function AttributesSelector({
       setSelectedImages(place.attributes);
     }
   }, [place]);
-
-  const { data: session, status } = useSession();
 
   return (
     <Flex justify={"space-between"} align={"center"} padding={"1em"}>

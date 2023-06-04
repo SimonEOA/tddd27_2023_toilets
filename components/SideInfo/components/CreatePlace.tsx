@@ -28,9 +28,6 @@ export const CreatePlace = ({
 }) => {
   if (!place) return null;
   if (!isOpen) return null;
-  const [name, setName] = useState<string>(place?.name);
-  const [address, setAddress] = useState<string>(place?.address);
-  const [description, setDescription] = useState<string>(place?.description);
   const [attributes, setAttributes] = useState<string[]>([]);
 
   const [imageNames, setImageNames] = useState<string[]>([]);

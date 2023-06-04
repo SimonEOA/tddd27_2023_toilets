@@ -16,7 +16,6 @@ import { ReviewWithUser } from "./Reviews";
 
 const WriteReview = ({
   place,
-  addReview,
   setAddReview,
   setReviews,
   setAverageRating,
@@ -24,7 +23,6 @@ const WriteReview = ({
   setCurrentPlace,
 }: {
   place: any;
-  addReview: boolean;
   setAddReview: Dispatch<SetStateAction<boolean>>;
   setReviews: Dispatch<SetStateAction<ReviewWithUser[]>>;
   setAverageRating: Dispatch<SetStateAction<number>>;
@@ -34,7 +32,8 @@ const WriteReview = ({
   const { data: session, status } = useSession();
 
   const [content, setContent] = useState<string>(""); // content of review
-  const [rating, setRating] = useState<number>(null); // rating of review
+  const [rating, setRating] = useState<number>(0); // rating of review
+  const [loading, setLoading] = useState<boolean>(false); // loading state for submit button
 
   const toast = useToast();
 
@@ -47,6 +46,7 @@ const WriteReview = ({
         isClosable: true,
       });
     } else {
+      setLoading(true);
       const res = await fetch("/api/review/create", {
         method: "POST",
         body: JSON.stringify({
@@ -81,6 +81,7 @@ const WriteReview = ({
 
         getRatings();
       }
+      setLoading(false);
     }
   };
 
@@ -89,11 +90,11 @@ const WriteReview = ({
       <HStack justify={"space-between"}>
         <HStack>
           <Image
-            src={session.user.image}
+            src={session?.user.image}
             boxSize={"35px"}
             borderRadius={"full"}
           />
-          <Text>{session.user.name}</Text>
+          <Text>{session?.user.name}</Text>
         </HStack>
         <HStack>
           <Text>Rating: </Text>
@@ -128,11 +129,13 @@ const WriteReview = ({
           onClick={() => {
             setAddReview(false);
           }}
+          isLoading={loading}
         >
           Cancel
         </Button>
         <Button
           isDisabled={!rating || !content}
+          isLoading={loading}
           onClick={() => {
             submitReview();
           }}
